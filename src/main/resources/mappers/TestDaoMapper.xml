@@ -1,0 +1,29 @@
+<!--
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+&lt;!&ndash; namespace必须指向Dao接口 &ndash;&gt;
+<mapper namespace="com.onway.web.dao.UserDao">
+
+    &lt;!&ndash; 所有列 &ndash;&gt;
+    <sql id="Column_list">
+        id,
+        user_name,
+        user_id
+    </sql>
+
+    <resultMap id="ListTest" type="UserPojo" >
+        <id  column="id" property="id" />
+        <result column="user_name" property="userName" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+
+    &lt;!&ndash; 根据ID查询数据 &ndash;&gt;
+    <select id="get" resultMap="ListTest">
+        SELECT
+        <include refid="Column_list" />
+        FROM sys_user
+    </select>
+
+</mapper>-->
