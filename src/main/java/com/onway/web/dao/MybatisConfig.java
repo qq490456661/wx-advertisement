@@ -63,7 +63,7 @@ public class MybatisConfig implements TransactionManagementConfigurer {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
             //设置xml扫描路径
-            bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
+            //bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
             return bean.getObject();
         } catch (Exception e) {
             throw new RuntimeException("sqlSessionFactory init fail",e);

@@ -1,6 +1,7 @@
 package com.onway.web.controller;
 
 import com.google.gson.Gson;
+import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
 import com.onway.web.module.Config;
 import com.onway.web.pojo.UserPojo;
@@ -9,8 +10,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +28,12 @@ import java.util.List;
  * Created by Administrator on 2017/8/6 0006.
  */
 @SpringBootApplication
+@ComponentScan("com.onway.web.**")
+@ServletComponentScan("com.onway.web.**")
+@EnableAutoConfiguration
 @EnableConfigurationProperties({Config.class})
-@MapperScan("com.onway.web.dao")
 @RestController
-public class DemoApplication{
+public class DemoApplication extends BaseAction{
 
     @Autowired
     private UserDao userDao;
