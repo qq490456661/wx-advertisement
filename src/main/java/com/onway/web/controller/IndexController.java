@@ -2,11 +2,7 @@ package com.onway.web.controller;
 
 import com.onway.web.controller.base.BaseAction;
 import com.onway.web.module.response.Response;
-import com.sun.org.glassfish.external.statistics.annotations.Reset;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

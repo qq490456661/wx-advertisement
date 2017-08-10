@@ -1,0 +1,63 @@
+*{margin:0;padding:0;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box}
+html{font-family:'微软雅黑',Arial,"Lucida Grande",Verdana,"Microsoft YaHei",hei,"Helvetica"}
+html,body{width:100%;height:100%;background-color:#fff;font-size:16px}
+a{color:#000;text-decoration:none}
+ol,ul,li{list-style:none}
+*,*:before,*:after{-webkit-tap-highlight-color:rgba(0,0,0,0)}
+*:focus{outline:none}
+.clearfix:after{content:"";display:table;clear:both}
+.float-left{float:left}
+.float-right{float:right}
+.error-close{display:inline-block;width:15px;height:1px;background-color:#fff;line-height:0;font-size:0;vertical-align:middle;transform:rotate(45deg);-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg)}
+.error-close:after{content:'';display:inline-block;width:15px;height:1px;background-color:#fff;transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg)}
+.main{width:100%;overflow:hidden;position:relative;}
+.article-box{width:100%;box-sizing:border-box;padding-bottom:30%}
+.article{width:100%}
+.article-content{width:100%}
+.link-box{width:100%;height:auto;position:fixed;bottom:0;left:0;z-index:99;overflow:hidden;}
+.icon-link-box{width:100%;height: auto;  float: left;}
+.icon-link-box .wechat-link,.icon-link-box .phone-link{width:8%;float:right;margin-right:1%}
+.icon-img{width:100%}
+.ad-link-box{width:100%;height:auto;padding-top:5px;float:left;}
+.ad-link{display:block;width:100%;height:100%;float:left;}
+.ad-img{width:100%;display:block;float:left;}
+.pub-num{width:100%;padding:20px 5% 0 5%}
+.pub-num img{width:100%}
+.mask{width:100%;height:100%;position:fixed;background-color:rgba(0,0,0,0.3);top:0;left:0;z-index:1000}
+.mask .full-ad-box{width:70%;height:60%;position:absolute;left:15%;top:15%;z-index:1001}
+.mask .full-ad-box .full-ad{width:100%;height:100%}
+.close-btn-box{width:20px;height:20px;background-color:rgba(0,0,0,0.5);position:absolute;top:0px;right:0px}
+.close-btn-box .close-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%)}
+.time-box{width:60px;height:20px;position:absolute;top:0;right:25px;background-color:rgba(0,0,0,0.5);color:#fff;font-size:12px;text-align:center;line-height:20px}
+.ba-ping{width:100%;height:100%;position:fixed;top:0;left:0;z-index:110}
+.ba-ping .img-box,.ba-ping .img-box img{width:100%;height:100%}
+.loading{width:100%;height:100%;position:fixed;top:0;left:0;z-index:100;background-color:rgba(0,0,0,0.5)}
+.loading .loader{display:block;position:absolute;top:40%;left:50%;transform:translate(-50%,0);-webkit-transform:translate(-50%,0);-moz-transform:translate(-50%,0);font-size:12px;color:#fff;width:120px;height:50px;background-color:rgba(0,0,0,0.5);border-radius:5px;position:relative}
+.loader-inner,.loader-text{display:inline-block;position:absolute;top:50%;transform:translate(0,-50%);-webkit-transform:translate(0,-50%);-moz-transform:translate(0,-50%)}
+.loader-inner{left:15px}
+.loader-text{left:50px}
+.ball-clip-rotate .circle{background-color:#fff;width:15px;height:15px;border-radius:100%;margin:2px;-webkit-animation-fill-mode:both;animation-fill-mode:both;border:2px solid #fff;border-bottom-color:transparent;height:25px;width:25px;background:transparent !important;display:inline-block;-webkit-animation:rotate 0.75s 0s linear infinite;animation:rotate 0.75s 0s linear infinite}
+#article-iframe {  height: 100%;   min-width: 100%;  }
+@keyframes rotate{0%{-webkit-transform:rotate(0deg) scale(1);transform:rotate(0deg) scale(1)}
+    50%{-webkit-transform:rotate(180deg) scale(0.6);transform:rotate(180deg) scale(0.6)}
+    100%{-webkit-transform:rotate(360deg) scale(1);transform:rotate(360deg) scale(1)}
+}@keyframes scale{30%{-webkit-transform:scale(0.3);transform:scale(0.3)}
+     100%{-webkit-transform:scale(1);transform:scale(1)}
+ }
+
+
+.tvp_poster_img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    background: #000 center no-repeat;
+    background-size: contain;
+}
+.tvp_container * {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}

@@ -1,7 +1,16 @@
+server:
+  port: 8090
+  tomcat:
+    uri-encoding: UTF-8
 spring:
   profiles:
     active: prod
   thymeleaf:
     mode: LEGACYHTML5
-server:
-  port: 8090
+    encoding: UTF-8
+    enabled: true
+    content-type: text/html
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
