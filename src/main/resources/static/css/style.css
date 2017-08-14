@@ -1,0 +1,32 @@
+*{margin:0;padding:0;}
+ul,li{list-style:none;}
+body{background: #f8f8f8;font:100% "Helvetica Neue","microsoft yahei";color:#3d4145; }
+.clear {clear:both; height:0; overflow:hidden; display:block; line-height:0}
+.clearfix:after {clear:both;font-size:0; height:0; display:block; visibility:hidden; content:" "; line-height:0}
+.clearfix {zoom:1}/* for IE6 IE7 */
+input{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }
+
+.info{width:100%;height:auto;background:#fff;float:left;}
+.info >div{width:88%;margin:0 3%;border-bottom:1px solid #d9d9d9;float:left;padding:0.8em 3%;}
+.info >div > label{width:32%;height:auto;float:left;font-size:0.9em;line-height:2.5em;}
+.info >div > div{width:68%;height:auto;float:right;overflow:hidden;}
+.preview{width:99%;height:auto;border:1px solid #d9d9d9;overflow:hidden;float:left;}
+.imghead{width:100%;height:auto;float:left;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);}
+.info >div > textarea,.info >div > input{font-size:1em;width:63%;padding:0.4em 2%;height:1.8em;line-height:1.8em;border:1px solid #d9d9d9;float:left;}
+.infoWarn{width:88%;height:auto;float:left;padding:1em 6%;}
+.infoWarn p{width:100%;height:auto;font-size:0.8em;line-height:1.5em;float:left;margin:0.2em 0;}
+.infoWarn p font{color:#f00;}
+.infoSubBtn{width:88%;margin:0 6% 1em;height:auto;float:left;font-size:1.2em;line-height:2em;background-color:#0894ec;border-radius:5px;color:#fff;}
+
+@media screen and (max-width: 320px){  body{font-size:85.33%} }
+@media screen and (max-width: 360px){  body{font-size:96%}  }
+@media screen and (min-width: 412px){  body{font-size:110%}  }
+@media screen and (min-width: 450px){  body{font-size:120%}  }
+@media screen and (min-width: 500px){  body{font-size:133%}  }
+@media screen and (min-width: 540px){  body{font-size:144%}  }
+@media screen and (min-width: 560px){  body{font-size:150%}  }
+@media screen and (min-width: 600px){  body{font-size:160%}  }
+@media screen and (min-width: 650px){  body{font-size:173%}  }
+@media screen and (min-width: 700px){  body{font-size:187%}  }
+@media screen and (min-width: 750px){  body{font-size:200%}  }

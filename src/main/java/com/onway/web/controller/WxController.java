@@ -78,7 +78,7 @@ public class WxController {
     }
 
     public static void main(String[] args) throws Exception {
-        String url = "http://mp.weixin.qq.com/s/yhKh-5pLKXDxE4rKkVE4cQ"; //http://mp.weixin.qq.com/s/yhKh-5pLKXDxE4rKkVE4cQ
+        String url = "http://mp.weixin.qq.com/s/yhKh-5pLKXDxE4rKkVE4cQ";
         WxController wx = new WxController();
         wx.wxController(url);
     }

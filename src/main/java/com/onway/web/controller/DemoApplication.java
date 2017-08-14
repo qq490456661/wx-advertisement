@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
 import com.onway.web.module.Config;
+import com.onway.web.pojo.User;
 import com.onway.web.pojo.UserPojo;
 import org.json.JSONObject;
 import org.mybatis.spring.annotation.MapperScan;
@@ -45,13 +46,19 @@ public class DemoApplication extends BaseAction{
     private Config config;
 
 
-
-    @RequestMapping("/index.html")
+    //@RequestMapping("/index.html")
     public String test(){
         Gson gson = new Gson();
         System.out.println(gson.toJson(config));
         UserPojo userPojoList = userDao.get("zhangsan");
         System.out.println(gson.toJson(userPojoList));
+        return "hello world!";
+    }
+    @RequestMapping("/index.html")
+    public String index(){
+        Gson gson = new Gson();
+        User user = userDao.select(1);
+        System.out.println(gson.toJson(user));
         return "hello world!";
     }
 

@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+ <head> 
+  <title id="title"></title> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"> 
+  <meta name="apple-mobile-web-app-capable" content="yes"> 
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+  <meta name="format-detection" content="telephone=no"> 
+  <link rel="stylesheet" type="text/css" href="../../css/ad.css"> 
+  <script src="../../js/jquery-1.8.2.min.js"></script> 
+  <style>
+		.ba-ping{width:100%;height:100%;position:fixed;top:0;left:0;z-index:110}
+		.ba-ping >a{width:100%;height:100%;float:left;}
+		.ba-ping .img-box,.ba-ping .img-box img{width:100%;height:100%}
+		.time-box{width:60px;height:20px;position:absolute;top:0;right:25px;background-color:rgba(0,0,0,0.5);color:#fff;font-size:12px;text-align:center;line-height:20px}
+		.close-btn-box{width:20px;height:20px;background-color:rgba(0,0,0,0.5);position:absolute;top:0px;right:0px}
+		.close-btn-box .close-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%)}
+		.error-close{display:inline-block;width:15px;height:1px;background-color:#fff;line-height:0;font-size:0;vertical-align:middle;transform:rotate(45deg);-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg)}
+		.error-close:after{content:'';display:inline-block;width:15px;height:1px;background-color:#fff;transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg)}
+
+		.link-box{width:100%;height:auto;position:fixed;bottom:0;left:0;z-index:99;overflow:hidden;    }
+		.icon-link-box{width:100%;height: auto;  float: left;}
+		.icon-link-box .wechat-link,.icon-link-box .phone-link{width:8%;float:right;margin-right:1%}
+		.icon-img{width:100%}
+		.ad-link-box{width:100%;height:auto;padding-top:5px;float:left;}
+		.ad-link{display:block;width:100%;height:100%;float:left;}
+		.ad-img{width:100%;display:block;float:left;}
+		.ad-txt{width:100%;height:75px;line-height:75px;background:url(../../images/bgC.png) repeat;float:left;color:#fff;font-size:20px;font-weight:500;}
+	</style> 
+ </head> 
+ <body> 
+  <script>
+    var isShowFullAd = true;//是否显示全屏广告
+    var isShowBottomAd = true;//是否显示底部广告
+
+    $(function () {
+
+        //操作系统判断
+        var userAgent = navigator.userAgent;
+        var clientType;
+        if (userAgent.indexOf("Android") >= 0) {
+            clientType = "Android";
+        } else if (userAgent.indexOf("iPad") >= 0) {
+            clientType = "iPad";
+        } else if (userAgent.indexOf("iPhone") >= 0) {
+            clientType = "iPhone";
+        } else if (userAgent.indexOf("Windows") >= 0) {
+            clientType = "Windows";
+        } else {
+            clientType = "其他";
+        }
+        var isiOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isiOS) {
+            $("#article-iframe").attr("scrolling", "no");
+        }
+
+
+        //广告展示
+        var seconds = 3;//秒
+        if (isShowFullAd) {//全屏广告
+            showFullImgDiv();
+            var timer = setInterval(function () {
+                seconds--;
+                $('.time').html(seconds);
+                if (seconds == 0) {
+                    if (isShowBottomAd) {
+                        showBottomAdv();
+                    }
+                    clearInterval(timer);
+                    hideMask('.ba-ping');
+                    toggleOverflow(false);
+                }
+            }, 1000);
+        }
+        if(isShowBottomAd){//底部广告
+            showBottomAdv();
+        }
+        toggleOverflow(false);
+
+        //隐藏正在加载中
+        function hideLoading() {
+            var loading = $('.loading');
+            loading.css('display', 'none');
+            toggleOverflow(false);
+        }
+        //显示正在加载中
+        function showLoading() {
+            var loading = $('.loading');
+            loading.css('display', 'block');
+            toggleOverflow(true);
+        }
+
+        // 		加载完成显示二维码
+        showQrCodeImg();
+        //显示二维码
+        function showQrCodeImg() {
+            var qrCodeImg = $('#qrCodeImg');
+            qrCodeImg.css('display', 'block');
+        }
+
+        //显示底部广告
+        function showBottomAdv() {
+            var bottomAdv = $('#bottomAdv');
+            bottomAdv.css('display', 'block');
+        }
+
+        //隐藏全屏广告
+        function hideFullImgDiv() {
+            var fullImgDiv = $('#fullImgDiv');
+            fullImgDiv.css('display', 'none');
+        }
+
+        //显示全屏广告
+        function showFullImgDiv() {
+            var fullImgDiv = $('#fullImgDiv');
+            fullImgDiv.css('display', 'block');
+        }
+
+
+        //以下3行是计算文章内容高度的,若跨域可将这3行注释掉,并给iframe设置一个高度
+        $("#article-iframe").load(function () {
+            $(this).height($(this).contents().height());
+        });
+
+        toggleOverflow(isShowFullAd);
+
+        $('.close-btn-box').click(function () {
+            hideMask('.ba-ping');
+            toggleOverflow(false);
+        })
+
+        function showMask(item) {
+            $(item).css('display', 'block');
+        }
+
+        function hideMask(item) {
+            $(item).css('display', 'none');
+        }
+
+        function toggleOverflow(flag) {
+            if (flag) {
+                $('html').css('overflow', 'hidden');
+                $('body').css('overflow', 'hidden');
+            } else {
+                $('html').css('overflow', '');
+                $('body').css('overflow', '');
+            }
+        }
+
+    });
+
+</script> 
+  <div class="main"> 
+   <div class="article-box"> 
+    <div class="article"> 
+     <div class="article-content"> 
+      <!--加载文章内容--> 
+      <iframe id="article-iframe" name="article-iframe" height="100%" width="100%" frameborder="0" scrolling="yes" src="yhKh-5pLKXDxE4rKkVE4cQ.html"></iframe> 
+     </div> 
+     <!--二维码--> 
+     <div id="qrCodeImg" class="pub-num" style="display: block;"> 
+      <a name="qrCodeImgLink"><img id="pub-num" src="../../images/QuickMark/2017-08-11/QuickMark1502440065081.jpg" style="width: 100%;"></a> 
+     </div> 
+    </div> 
+   </div> 
+   <!--全屏广告--> 
+   <div id="fullImgDiv" class="ba-ping" style="display: none;"> 
+    <a id="fullImgLink" href=""> 
+     <div class="img-box"> 
+      <img id="fullImg" src="../../images/img_full.jpg"> 
+     </div> </a> 
+    <div class="time-box"> 
+     <span><span class="time">3</span>秒关闭</span> 
+    </div> 
+    <div class="close-btn-box"> 
+     <div class="close-btn"> 
+      <i class="error-close"></i> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="loading" style="display: none;"> 
+    <div class="loader"> 
+     <div class="loader-inner ball-clip-rotate">
+      <div class="circle"></div>
+     </div> 
+     <span class="loader-text">加载中...</span> 
+    </div> 
+   </div> 
+   <!--底部广告--> 
+   <div id="bottomAdv" class="link-box"> 
+    <div class="icon-link-box clearfix" id="phone-linkDiv"> 
+     <a class="phone-link" id="phone-link" href="tel:"><img class="icon-img" src="../../images/serve_phone_icon.png"></a> 
+     <a class="wechat-link" id=""><img class="icon-img" src="../../images/wechat_icon.png"></a> 
+    </div> 
+    <div class="ad-link-box" id="adImgDiv"> 
+     <a id="adLink" class="ad-link" href="http://"> <img id="adImg" class="ad-img" src="../../images/img_bot.jpg"> 
+      <marquee id="adTxt" class="ad-txt" direction="left" scrollamount="3">
+      </marquee> </a> 
+    </div> 
+   </div> 
+  </div>  
+  <script>
+    $(function(){
+        $("#article-iframe").load(function(){
+            var video=$(this).contents().find("iframe");
+            var videoSrc=video.attr("data-src");
+            video.css("display","block");
+            video.attr("src",videoSrc);
+            $(this).contents().find(".img_loading").hide();
+        })
+
+    })
+</script> 
+ </body>
+</html>
