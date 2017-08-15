@@ -49,8 +49,10 @@ public class GetUrl {
     private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final int id=1;
+
     @Autowired
     private UserDao userDao;
+
     @RequestMapping("/addAd.do")
     //@RequestMapping
     public void addAd(HttpServletResponse response, HttpServletRequest request,

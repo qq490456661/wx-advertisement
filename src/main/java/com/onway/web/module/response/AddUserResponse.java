@@ -1,11 +1,11 @@
-package com.onway.web.pojo;
+package com.onway.web.module.response;
 
 import java.util.Date;
 
 /**
- * Created by Administrator on 2017/8/6 0006.
+ * Created by Administrator on 2017/8/15 0015.
  */
-public class UserPojo {
+public class AddUserResponse{
 
     private int id;
 
@@ -13,15 +13,7 @@ public class UserPojo {
 
     private String userId;
 
-    private Date gmtCreate;
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
+    private String gmtCreate;
 
     public int getId() {
         return id;
@@ -45,5 +37,13 @@ public class UserPojo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(String gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }
