@@ -9,6 +9,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.onway.web.dao.UserDao;
 import com.onway.web.pojo.User;
+import com.onway.web.pojo.UserPath;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -150,10 +151,8 @@ public class GetUrl {
             File newFile = new File(relativelyPath+dirPath+"/"+fileName);
             FileUtils.writeByteArrayToFile(newFile,String.valueOf(doc).getBytes());
             response.sendRedirect(fileName);
-            User user = userDao.select(id);
-            if (user !=null){
 
-            }
+
 
 
 
