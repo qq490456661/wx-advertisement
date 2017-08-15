@@ -5,6 +5,7 @@ import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
 import com.onway.web.module.Config;
 import com.onway.web.pojo.User;
+import com.onway.web.pojo.UserPath;
 import com.onway.web.pojo.UserPojo;
 import org.json.JSONObject;
 import org.mybatis.spring.annotation.MapperScan;
@@ -25,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +66,19 @@ public class DemoApplication extends BaseAction{
         System.out.println(gson.toJson(user));
         return "hello world!";
     }
+    @RequestMapping("/insert.html")
+    public String insert(){
+        int id=1;
+        LocalDate dateNow =LocalDate.now();
 
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = dateNow.atStartOfDay().atZone(zone).toInstant();
+        Date date=Date.from(instant);
+        Gson gson = new Gson();
+        userDao.insert(id,"www.baidu.com","www.baidu.com","www.baidu.com","www.baidu.com", date,"www.baidu.com","www.baidu.com","www.baidu.com");
+        //System.out.println(gson.toJson(userPath));
+        return "hello world!";
+    }
 
     @RequestMapping("/rediect/{key}")
     public void getRediect(@PathVariable("key")String key,HttpServletResponse response){
