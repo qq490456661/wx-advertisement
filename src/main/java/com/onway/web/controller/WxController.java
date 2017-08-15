@@ -20,7 +20,7 @@ public class WxController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/")
-    public String wxController(@RequestParam(value = "url", required = false) String url) throws Exception {
+    public String wxController(@RequestParam(value = "url", required = true) String url) throws Exception {
         log.info("开始输出");
         if (url == null || "".equals(url)){
 //            return new ModelAndView("new");
