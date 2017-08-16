@@ -1,4 +1,4 @@
-package com.onway.web.controller;
+package com.onway.web.util;
 
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,10 @@ import java.util.Map;
  * Created by win7 on 2017/8/11.
  */
 @Controller
-public class upload {
+public class UploadUtile {
 //    private static final String relativelyPath=System.getProperty("user.dir")+"/src/";
     private static final String relativelyPath="/usr/local/wx_resource/";
+    private static final String timestamp=String.valueOf(System.currentTimeMillis());
     @RequestMapping("/upload.do")
     @ResponseBody
     public Map uploadImg(@RequestParam(value ="preview1"  ,required = false) MultipartFile preview1,
@@ -39,18 +40,8 @@ public class upload {
                           HttpServletRequest request
                           )
     {
-        MultipartFile image1;
-        MultipartFile image2;
-        MultipartFile image3;
-        if(preview1!=null){
-            image1=preview1;
-        }
-        if(preview2!=null){
-            image2=preview1;
-        }
-        if(preview3!=null){
-            image3=preview1;
-        }
+        //String timestamp= String.valueOf(System.currentTimeMillis());
+
         MultipartFile[] files={preview1,preview2,preview3};
         List<String> list = new ArrayList<String>();
         if (files != null && files.length > 0) {
@@ -72,12 +63,18 @@ public class upload {
         }
         LocalDate day=LocalDate.now();
         Map map =new HashMap();
+        if(preview2==null){
+            map.put("status","0");
+        }else if(preview2!=null){
+            map.put("status","1");
+        }
         map.put("bottomText",bottomText);
         map.put("links",links);
         map.put("author",author);
         map.put("tel",tel);
         map.put("title",title);
         map.put("time",time);
+        map.put("timestamp",timestamp);
         return map;
     }
     private List<String> saveFile(HttpServletRequest request,
@@ -89,7 +86,7 @@ public class upload {
                 // )
                 String filePath ="";
                 LocalDate day=LocalDate.now();
-                String timestamp= String.valueOf(System.currentTimeMillis());
+
                 String fileName="";
                 if(num=="0"){
                     fileName="QuickMark"+timestamp+".jpg";

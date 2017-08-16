@@ -97,10 +97,14 @@
                 var tel=data.tel;
                 var title=data.title;
                 var time=data.time;
+                var timestamp=data.timestamp;
+                var status=data.status;
                 jQuery.ajax({
                     url:"/addAd.do",
                     type:"post",
-                    data:{"tel":tel,"bottomText":bottomText,"links":links,"author":author,"title":title,"time":time},
+                    data:{"tel":tel,"bottomText":bottomText,"links":links,
+                        "author":author,"title":title,"time":time,
+                        "timestamp":timestamp,"status":status},
                     success:function (r) {
                         window.location.href=r;
                     }        

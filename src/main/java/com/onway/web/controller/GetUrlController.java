@@ -23,7 +23,7 @@ import java.time.LocalDate;
  * Created by win7 on 2017/8/1.
  */
 @RestController
-public class GetUrl {
+public class GetUrlController {
     //图片保存路径
     //private static final String saveImgPath="E://imgs";
     //private static final String htmlPath="192.168.0.130:8090/";
@@ -32,25 +32,29 @@ public class GetUrl {
     private static final String relativelyPath="/usr/local/wx_resource/";
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final int id=1;
+
     @Autowired
     private UserDao userDao;
-    @RequestMapping("/test")
-    public String test(HttpServletRequest request){
-        //String path=request.getSession().getServletContext().getRealPath("");
-        String path=request.getSession().getServletContext().getRealPath("/");
 
-        System.out.println(path);
-        return path;
-    }
+//    @RequestMapping("/test")
+//    public String test(HttpServletRequest request){
+//        //String path=request.getSession().getServletContext().getRealPath("");
+//        String path=request.getSession().getServletContext().getRealPath("/");
+//
+//        System.out.println(path);
+//        return path;
+//    }
+
     @RequestMapping("/addAd.do")
-    //@RequestMapping
     public String addAd(HttpServletResponse response, HttpServletRequest request,
                       @RequestParam(value ="bottomText" ,required = false) String bottomText,
                       @RequestParam(value ="links" ,required = false) String links,
                       @RequestParam(value ="author" ,required = false) String author,
                       @RequestParam(value ="tel" ,required = false) String tel,
                       @RequestParam(value ="title" ,required = false) String title,
-                      @RequestParam(value ="time" ,required = false) String time){
+                      @RequestParam(value ="time" ,required = false) String time,
+                      @RequestParam(value ="timestamp" ,required = false) String timestamp,
+                      @RequestParam(value ="status" ,required = false) String status){
 
 
         System.out.println(time);
@@ -125,7 +129,6 @@ public class GetUrl {
             Element newBottomLink=doc.getElementById("adLink");
             newBottomLink.attr("href",links);
             //定义广告页的名字
-            String timestamp= String.valueOf(System.currentTimeMillis());
             String fileName=timestamp+".html";
             //生成二维码
             //File quickResponseDir = new File(relativelyPath+"images/QuickMark/"+String.valueOf(day));
@@ -137,8 +140,24 @@ public class GetUrl {
             //String QuickResponse=QuickResponseDirPath+"/img"+timestamp+".jpg";
             //生成二维码(扫描二维码跳转的路径/二维码宽度/二维码高度/二维码嵌入的图片位置/二维码生成路径)
             //GetUrl.encode(htmlPath+"html/"+day+"/"+fileName, 480, 480, relativelyPath+"images/img.jpg",QuickResponse);
-            Element element=doc.getElementById("pub-num");
-            element.attr("src","../../images/QuickMark/"+day+"/QuickMark"+timestamp+".jpg");
+            //修改二维码
+            Element pubNum=doc.getElementById("pub-num");
+            pubNum.attr("src","../../images/QuickMark/"+day+"/QuickMark"+timestamp+".jpg");
+            //修改底部广告
+            if(status=="1"){
+                Element BottomAd=doc.getElementById("adImg");
+                BottomAd.attr("src","../../images/BottomAd/"+day+"/QuickMark"+timestamp+".jpg");
+                Element BottomText =doc.getElementById("adTxt");
+                BottomText.remove();
+            }else {
+                Element BottomAd=doc.getElementById("adImg");
+                BottomAd.remove();
+                Element BottomText =doc.getElementById("adTxt");
+                BottomText.text(bottomText);
+            }
+            //修改全屏广告
+            Element FullAd=doc.getElementById("fullImg");
+            FullAd.attr("src","../../images/FullAd/"+day+"/QuickMark"+timestamp+".jpg");
 
             //生成带广告的广告页面
             File newFile = new File(relativelyPath+dirPath+"/"+fileName);
@@ -147,7 +166,6 @@ public class GetUrl {
 //            response.sendRedirect(fileName);
             String returnPath=UrlPath+dirPath+"/"+fileName;
             return returnPath;
-            //response.sendRedirect(UrlPath+dirPath+"/"+fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }

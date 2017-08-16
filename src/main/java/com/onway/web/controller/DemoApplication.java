@@ -4,31 +4,28 @@ import com.google.gson.Gson;
 import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
 import com.onway.web.module.Config;
+import com.onway.web.module.request.AddUserRequest;
+import com.onway.web.module.response.AddUserResponse;
+import com.onway.web.module.response.AddUserResponseList;
+import com.onway.web.module.response.Response;
+import com.onway.web.module.response.ResponseList;
 import com.onway.web.pojo.User;
-import com.onway.web.pojo.UserPath;
 import com.onway.web.pojo.UserPojo;
-import org.json.JSONObject;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,13 +77,32 @@ public class DemoApplication extends BaseAction{
         return "hello world!";
     }
 
-    @RequestMapping("/rediect/{key}")
-    public void getRediect(@PathVariable("key")String key,HttpServletResponse response){
-        try {
-            response.sendRedirect(key);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @RequestMapping("/addUser")
+    public Response getRediect(AddUserRequest request){
+
+        Response response = new Response(request);
+
+        List<UserPojo> userPojoList = new ArrayList<UserPojo>();
+        UserPojo userPojo = new UserPojo();
+        userPojo.setUserId("123");
+        userPojo.setUserName("xxxx");
+        userPojo.setGmtCreate(new Date());
+        userPojoList.add(userPojo);
+        UserPojo userPojoa = new UserPojo();
+        userPojoa.setUserId("222");
+        userPojoa.setUserName("gfggg");
+        userPojoa.setGmtCreate(new Date());
+        userPojoList.add(userPojoa);
+
+       /* AddUserResponse addUserResponse = new AddUserResponse();
+        addUserResponse.setUserName(userPojo.getUserName());
+        addUserResponse.setUserId(userPojo.getUserId());
+        addUserResponse.setGmtCreate("2017-05");*/
+        AddUserResponseList view = new AddUserResponseList();
+        view.toResponse(userPojoList);
+        response.setData(view);
+
+        return  response;
     }
 
 
