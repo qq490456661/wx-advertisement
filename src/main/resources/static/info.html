@@ -48,8 +48,16 @@
         <textarea name="links">http://</textarea>
     </div>
     <div>
+        <label>文章标题</label>
+        <input type="text" name="title">
+    </div>
+    <div>
         <label>文章作者</label>
         <input type="text" name="author">
+    </div>
+    <div>
+        <label>时间</label>
+        <input type="date" name="time">
     </div>
     <div>
         <label>联系电话</label>
@@ -87,12 +95,14 @@
                 var links=data.links;
                 var author=data.author;
                 var tel=data.tel;
+                var title=data.title;
+                var time=data.time;
                 jQuery.ajax({
                     url:"/addAd.do",
                     type:"post",
-                    data:{"tel":tel,"bottomText":bottomText,"links":links,"author":author},
+                    data:{"tel":tel,"bottomText":bottomText,"links":links,"author":author,"title":title,"time":time},
                     success:function (r) {
-                        
+                        window.location.href=r;
                     }        
                 })
 //                console.log(bottomText+links+author+tel);

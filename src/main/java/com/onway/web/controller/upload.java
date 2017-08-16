@@ -23,7 +23,8 @@ import java.util.Map;
  */
 @Controller
 public class upload {
-    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
+//    private static final String relativelyPath=System.getProperty("user.dir")+"/src/";
+    private static final String relativelyPath="/usr/local/wx_resource/";
     @RequestMapping("/upload.do")
     @ResponseBody
     public Map uploadImg(@RequestParam(value ="preview1"  ,required = false) MultipartFile preview1,
@@ -33,6 +34,8 @@ public class upload {
                           @RequestParam(value ="links" ,required = false) String links,
                           @RequestParam(value ="author" ,required = false) String author,
                           @RequestParam(value ="tel" ,required = false) String tel,
+                          @RequestParam(value ="title" ,required = false) String title,
+                          @RequestParam(value ="time" ,required = false) String time,
                           HttpServletRequest request
                           )
     {
@@ -73,6 +76,8 @@ public class upload {
         map.put("links",links);
         map.put("author",author);
         map.put("tel",tel);
+        map.put("title",title);
+        map.put("time",time);
         return map;
     }
     private List<String> saveFile(HttpServletRequest request,
