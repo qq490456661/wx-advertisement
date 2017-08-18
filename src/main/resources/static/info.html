@@ -9,67 +9,305 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="applicable-device" content="mobile">
     <title>账户设置</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="js/imgInput.js"></script>
-    <script type="text/javascript" src="js/jquery-form.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-form.js"></script>
 </head>
+<script>
+    var bottomFlag=false;
+    $(function () {
+        jQuery.ajax({
+            url:'selectById',
+            type:'post',
+            success:function(r){
+                var data=r.data;
+                console.log(data);
+                if(data.userQrcode!=""){
+                   $("#preview1").css("background-image","url("+data.userQrcode+")");
+                }
+                if(data.userBottomAd!=""){
+                    $("#preview2").css("background-image","url("+data.userBottomAd+")");
+                    bottomFlag=true;
+                }
+                if(data.userFullAd!=""){
+                    $("#preview3").css("background-image","url("+data.userFullAd+")");
+                }
+                if(data.userBottomText!=""){
+                    $("#bottomText").val(data.userBottomText);
+                }
+                if(data.userUrl!="http://"){
+                    $("#links").val(data.userUrl);
+                }
+                if(data.userTitle!=""){
+                    $("#title").val(data.userTitle);
+                }
+                if(data.userAuthor!=""){
+                    $("#author").val(data.userAuthor);
+                }
+                if(data.cell!=""){
+                    $("#tel").val(data.cell);
+                }
+                if(data.userDate!="null"){
+                    $("#time").val(jsonTimeStamp(data.userDate));
+                }
+            }
+
+        })
+    })
+
+    function jsonTimeStamp(milliseconds) {
+        if (milliseconds != "" && milliseconds != null
+            && milliseconds != "null") {
+            var datetime = new Date();
+            datetime.setTime(milliseconds);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0"
+                + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate()
+                : datetime.getDate();
+            return year + "-" + month + "-" + date
+        } else {
+            return "";
+        }
+
+    }
+</script>
 <body>
-<form id="info" class="info">
-    <div>
-        <label>微信二维码</label>
+<main class="infoMain">
+    <form class="info" id="info">
         <div>
-            <div class="preview" id="preview1">
-                <!--<img class="imghead">-->
+            <label>微信二维码</label>
+            <div>
+                <div class="preview" id="preview1"></div>
+                <input type="file" name="preview1" id="file1">
+                <div class="modal" id="modal1">
+                    <div class="clipArea" id="clipArea1"></div>
+                    <input type="button"  class="clipBtn" id="clipBtn1" value="截取">
+                </div>
+                <br>
+                <span class="delPicBtn" id="1">删除图片</span>
             </div>
-            <input type="file" name="preview1" onchange="previewImage1(this)" />
         </div>
-    </div>
-    <div>
-        <label>底部广告</label>
         <div>
-            <div class="preview" id="preview2"></div>
-            <input type="file" id="preview4" name="preview2" onchange="previewImage2(this)" />
+            <label>底部广告</label>
+            <div>
+                <div class="preview" id="preview2"></div>
+                <input type="file"  name="preview2" id="file2">
+                <div class="modal" id="modal2">
+                    <div class="clipArea" id="clipArea2"></div>
+                    <input type="button"  class="clipBtn" id="clipBtn2" value="截取">
+                </div>
+                <br>
+                <span class="delPicBtn" id="2">删除图片</span>
+            </div>
         </div>
-    </div>
-    <div>
-        <label>全屏广告</label>
         <div>
-            <div class="preview"  id="preview3"></div>
-            <input type="file" name="preview3" onchange="previewImage3(this)" />
+            <label>全屏广告</label>
+            <div>
+                <div class="preview" id="preview3"></div>
+                <input type="file" name="preview3" id="file3">
+                <div class="modal" id="modal3">
+                    <div class="clipArea" id="clipArea3"></div>
+                    <input type="button"  class="clipBtn" id="clipBtn3" value="截取">
+                </div>
+                <br>
+                <span class="delPicBtn" id="3">删除图片</span>
+            </div>
         </div>
+        <div>
+            <label>底部滚动文案</label>
+            <input type="text" name="bottomText" id="bottomText">
+        </div>
+        <div>
+            <label>推广链接</label>
+            <textarea name="links" id="links">http://</textarea>
+        </div>
+        <div>
+            <label>文章标题</label>
+            <input type="text" name="title" id="title">
+        </div>
+        <div>
+            <label>文章作者</label>
+            <input type="text" name="author" id="author">
+        </div>
+        <div>
+            <label>时间</label>
+            <input type="date" name="time" id="time">
+        </div>
+        <div>
+            <label>联系电话</label>
+            <input type="number" name="tel" id="tel">
+        </div>
+<!--        <div>
+            <label>微信号</label>
+            <input type="text">
+        </div>-->
+    </form>
+    <div class="infoWarn">
+        <p><font>*</font>底部浮动尺寸：600*120像素；二维码尺寸：480*480像素； 全屏广告尺寸：450*800像素。</p>
+        <p><font>*</font>以上所有项目，留空则不显示</p>
     </div>
-    <div>
-        <label>底部滚动文案</label>
-        <input type="text" name="bottomText" id="bottomText">
-    </div>
-    <div>
-        <label>推广链接</label>
-        <textarea name="links">http://</textarea>
-    </div>
-    <div>
-        <label>文章标题</label>
-        <input type="text" name="title">
-    </div>
-    <div>
-        <label>文章作者</label>
-        <input type="text" name="author">
-    </div>
-    <div>
-        <label>时间</label>
-        <input type="date" name="time">
-    </div>
-    <div>
-        <label>联系电话</label>
-        <input type="number" name="tel">
-    </div>
-<div class="infoWarn">
-    <p><font>*</font>底部浮动尺寸：600*120像素  文章头部尺寸：600*120像素；二维码尺寸：480*480像素； 全屏广告尺寸：450*800像素。</p>
-    <p><font>*</font>以上所有项目，留空则不显示</p>
-</div>
-<input class="infoSubBtn" type="button" value="保存" onclick="commit()">
-</form>
+    <input class="infoSubBtn" type="button" value="保存" onclick="commit()">
+</main>
+<footer>
+    <ul>
+        <li><a href="info.html"><img src="../images/icon1_1.png"><span>广告设置</span></a></li>
+        <li><a href="post.html"><img src="../images/icon2_2.png"><span>已发广告</span></a></li>
+        <li><a href="link.html"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
+    </ul>
+</footer>
 </body>
+<script type="text/javascript">
+    $(function(){
+        $("#preview1").height($("#preview1").width());
+        $("#preview2").height(0.2*$("#preview1").width());
+        $("#preview3").height(1.78*$("#preview3").width());
+    })
+</script>
+<script src="../js/iscroll-zoom.js"></script>
+<script src="../js/hammer.min.js"></script>
+<script src="../js/lrz.all.bundle.js"></script>
+<script src="../js/PhotoClip.js"></script>
+<script>
+    var screenW=$(window).width();
+    var screenH=$(window).height();
+    var pc1 = new PhotoClip('#clipArea1', {
+        size: [screenW,screenW],
+        outputSize: [0,0],
+//		adaptive: ['60%', '80%'],
+        file: '#file1',
+        view: '#preview1',
+        ok: '#clipBtn1',
+        loadStart: function() {
+            console.log('开始读取照片');
+        },
+        loadComplete: function() {
+            console.log('照片读取完成');
+            $("#modal1").show();
+        },
+        done: function(dataURL) {
+            console.log(dataURL);
+        },
+        fail: function(msg) {
+            alert(msg);
+        }
+    });
+    var pc2 = new PhotoClip('#clipArea2', {
+        size: [screenW,0.2*screenW],
+        outputSize: [0,0],
+//		adaptive: ['60%', '80%'],
+        file: '#file2',
+        view: '#preview2',
+        ok: '#clipBtn2',
+        loadStart: function() {
+            console.log('开始读取照片');
+        },
+        loadComplete: function() {
+            console.log('照片读取完成');
+            $("#modal2").show();
+        },
+        done: function(dataURL) {
+            console.log(dataURL);
+        },
+        fail: function(msg) {
+            alert(msg);
+        }
+    });
+    var pc2 = new PhotoClip('#clipArea3', {
+        size: [0.56*screenH,screenH],
+        outputSize: [0,0],
+//		adaptive: ['60%', '80%'],
+        file: '#file3',
+        view: '#preview3',
+        ok: '#clipBtn3',
+        loadStart: function() {
+            console.log('开始读取照片');
+        },
+        loadComplete: function() {
+            console.log('照片读取完成');
+            $("#modal3").show();
+        },
+        done: function(dataURL) {
+            console.log(dataURL);
+        },
+        fail: function(msg) {
+            alert(msg);
+        }
+    });
+
+    $(function(){
+        $(".clipBtn").click(function(){
+            $(".modal").hide();
+        })
+    })
+    $(".delPicBtn").click(function(){
+        $(this).siblings(".preview").css("background-image","none");
+        $(this).siblings("input:file").val("");
+        var id=this.id;
+        if(id==1){
+            jQuery.ajax({
+                url:'selectById',
+                type:'post',
+                success:function(r){
+                    var data=r.data;
+                    jQuery.ajax({
+                        url:'update',
+                        type:'post',
+                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                            "userTitle":data.userTitle,"userAuthor":data.userAuthor,
+                            "userDate":data.userDate,"userQrcode":"",
+                            "cell":data.cell,"userFullAd":data.userFullAd,
+                            "userBottomAd":data.userBottomAd,"userBottomText":data.userBottomText},
+                        success:function () {
+
+                        }
+                    })
+                }
+            })
+        }else if(id==2){
+            jQuery.ajax({
+                url:'selectById',
+                type:'post',
+                success:function(r){
+                    var data=r.data;
+                    jQuery.ajax({
+                        url:'update',
+                        type:'post',
+                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                            "userTitle":data.userTitle,"userAuthor":data.userAuthor,
+                            "userDate":data.userDate,"userQrcode":data.userQrcode,
+                            "cell":data.cell,"userFullAd":data.userFullAd,
+                            "userBottomAd":"","userBottomText":data.userBottomText},
+                        success:function () {
+
+                        }
+                    })
+                }
+            })
+        }else if(id==3){
+            jQuery.ajax({
+                url:'selectById',
+                type:'post',
+                success:function(r){
+                    var data=r.data;
+                    jQuery.ajax({
+                        url:'update',
+                        type:'post',
+                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                            "userTitle":data.userTitle,"userAuthor":data.userAuthor,
+                            "userDate":data.userDate,"userQrcode":data.userQrcode,
+                            "cell":data.cell,"userFullAd":"",
+                            "userBottomAd":data.userBottomAd,"userBottomText":data.userBottomText},
+                        success:function () {
+
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+</script>
 <script type="text/javascript">
     $(function(){
         $("#preview1").height($("#preview1").width());
@@ -78,42 +316,47 @@
     })
     function commit(){
         //var value =document.getElementsByName("preview2").value;
-        var value=$("#preview4").val();
+        var value=$("#file2").val();
 
         var bottom=$("#bottomText").val();
-        if(value!=""&&bottom!=""){
-            alert("底部图片和底部滚动文案只能选择其一");
-            return;
+        if(bottomFlag==true){
+            if(bottom!=""){
+                alert("底部图片和底部滚动文案只能选择其一");
+                return;
+            }
         }
         $("#info").ajaxSubmit({
             async:false,
             url:"upload.do",
             type:"post",
-            success:function(data){
-
-                var bottomText=data.bottomText;
-                var links=data.links;
-                var author=data.author;
-                var tel=data.tel;
-                var title=data.title;
-                var time=data.time;
-                var timestamp=data.timestamp;
-                var status=data.status;
-                jQuery.ajax({
-                    url:"/addAd.do",
-                    type:"post",
-                    data:{"tel":tel,"bottomText":bottomText,"links":links,
-                        "author":author,"title":title,"time":time,
-                        "timestamp":timestamp,"status":status},
-                    success:function (r) {
-                        window.location.href=r;
-                    }        
-                })
+            success:function(r){
+                window.location.href="link.html";
+//                var data=r.data;
+//                var bottomText=data.bottomText;
+//                var links=data.links;
+//                var author=data.author;
+//                var tel=data.tel;
+//                var title=data.title;
+//                var time=data.time;
+//                var timestamp=data.timestamp;
+//                var status1=data.status1;
+//                var status2=data.status2;
+//                var status3=data.status3;
+//                jQuery.ajax({
+//                    url:"/addAd.do",
+//                    type:"post",
+//                    data:{"tel":tel,"bottomText":bottomText,"links":links,
+//                        "author":author,"title":title,"time":time,
+//                        "timestamp":timestamp,"status1":status1,
+//                        "status2":status2,"status3":status3},
+//                    success:function (r) {
+//
+//                    }
+//                })
 //                console.log(bottomText+links+author+tel);
 //                alert("asdasdas");
             }
         })
     }
-
 </script>
 </html>

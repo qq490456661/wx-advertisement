@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="applicable-device" content="mobile">
+    <title>文章广告生成系统</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<main class="linkMain">
+    <div class="linkUser">
+        <div class="headBox"><img src="" alt="微信头像"></div>
+        <p>您好，某某某</p>
+    </div>
+    <input type="text" id="text" placeholder="在这里粘贴原文链接">
+    <input class="linkSubBtn" type="button" value="点击提交" onclick="commit()">
+</main>
+<footer>
+    <ul>
+        <li><a href="info.html"><img src="../images/icon1_2.png"><span>广告设置</span></a></li>
+        <li><a href="post.html"><img src="../images/icon2_2.png"><span>已发广告</span></a></li>
+        <li><a href="link.html"><img src="../images/icon3_1.png"><span>会员中心</span></a></li>
+    </ul>
+</footer>
+</body>
+<script>
+    function commit(){
+        var url =$("#text").val();
+        if(url.indexOf("http://mp.weixin.qq.com/s")==-1){
+            alert("该来源文章暂不支持!");
+            return;
+        }
+        jQuery.ajax({
+            url:'getUrl.do',
+            type:'post',
+            data:{"url":url},
+            success:function(r){
+                window.location.href=r;
+            }
+        })
+    }
+
+</script>
+</html>

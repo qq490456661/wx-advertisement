@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/8/10.
  */
-//å›¾ç‰‡ä¸Šä¼ é¢„è§ˆ    IEæ˜¯ç”¨äº†æ»¤é•œã€‚
+//Í¼Æ¬ÉÏ´«Ô¤ÀÀ    IEÊÇÓÃÁËÂË¾µ¡£
 function previewImage1(file)
 {
     var div = document.getElementById('preview1');
@@ -13,7 +13,7 @@ function previewImage1(file)
         reader.onload = function(evt){img.src = evt.target.result;}
         reader.readAsDataURL(file.files[0]);
     }
-    else //å…¼å®¹IE
+    else //¼æÈÝIE
     {
         var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
         file.select();
@@ -35,7 +35,7 @@ function previewImage2(file)
         reader.onload = function(evt){img.src = evt.target.result;}
         reader.readAsDataURL(file.files[0]);
     }
-    else //å…¼å®¹IE
+    else //¼æÈÝIE
     {
         var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
         file.select();
@@ -57,7 +57,7 @@ function previewImage3(file)
         reader.onload = function(evt){img.src = evt.target.result;}
         reader.readAsDataURL(file.files[0]);
     }
-    else //å…¼å®¹IE
+    else //¼æÈÝIE
     {
         var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
         file.select();

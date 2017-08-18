@@ -4,8 +4,14 @@ body{background: #f8f8f8;font:100% "Helvetica Neue","microsoft yahei";color:#3d4
 .clear {clear:both; height:0; overflow:hidden; display:block; line-height:0}
 .clearfix:after {clear:both;font-size:0; height:0; display:block; visibility:hidden; content:" "; line-height:0}
 .clearfix {zoom:1}/* for IE6 IE7 */
-input{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }
+input[type=text],input[type=number],input[type=date],input[type=submit]{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }
 
+footer{width:100%;height:auto;position:fixed;bottom:0;left:0;padding:0.4em 0;border-top:1px solid #d9d9d9;background-color:#fff;}
+footer ul{width:100%;height:auto;float:left;}
+footer ul li{width:33.33%;height:auto;float:left;text-align:center;}
+footer ul li img{width:1.5em;hegiht:1.5em;}
+footer ul li span{width:100%;height:auto;float:left;font-size:0.625em;color:#2a2434;line-height:1.2em;}
+.infoMain{width:100%;height:auto;margin-bottom:3.8em;float:left;}
 .info{width:100%;height:auto;background:#fff;float:left;}
 .info >div{width:88%;margin:0 3%;border-bottom:1px solid #d9d9d9;float:left;padding:0.8em 3%;}
 .info >div > label{width:32%;height:auto;float:left;font-size:0.9em;line-height:2.5em;}
@@ -17,8 +23,25 @@ input{  background-color:transparent; border-color:transparent;-webkit-appearanc
 .infoWarn{width:88%;height:auto;float:left;padding:1em 6%;}
 .infoWarn p{width:100%;height:auto;font-size:0.8em;line-height:1.5em;float:left;margin:0.2em 0;}
 .infoWarn p font{color:#f00;}
-.infoSubBtn{width:88%;margin:0 6% 1em;height:auto;float:left;font-size:1.2em;line-height:2em;background-color:#0894ec;border-radius:5px;color:#fff;}
-
+input.infoSubBtn{width:88%;margin:0 6% 1em;height:auto;float:left;font-size:1.2em;line-height:2em;background-color:#0894ec;border-radius:5px;color:#fff;}
+.modal{ width:100%;height:100%;position:fixed;top:0;left:0;background-color:#fff;z-index:5;display:none;  }
+.clipArea {  height:100%;  }
+.clipBtn{position:absolute;right:3%;bottom:3%;}
+.linkMain{width:94%;height:auto;margin:0 3% 3.8em;float:left;}
+.linkUser{width:100%;height:auto;float:left;padding:2em 0;}
+.headBox{width:5.4em;height:5.4em;margin:1.5em auto;border:1px solid #d9d9d9;border-radius:50%;overflow:hidden;}
+.headBox img{width:100%;height:100%;float:left;}
+.linkUser >p{width:100%;text-align:center;font-size:1em;line-height:1.5em;}
+.linkMain >input{font-size:1em;width:95%;padding:0.2em 2%;margin:0.5em 0;height:1.8em;line-height:1.8em;border:1px solid #d9d9d9;float:left;}
+.linkMain >input.linkSubBtn{width: 100%;margin: 0;padding:0;border:0;height: auto;float: left;font-size: 1em;line-height: 2.2em;background-color: #0894ec;border-radius: 5px;color: #fff;}
+.postMain{width:90%;height:auto;margin:0 5% 3.8em;float:left;}
+.postMain ul{width:100%;height:auto;float:left;}
+.postMain ul li{width:100%;height:auto;float:left;margin:0.8em 0;}
+.postMain ul li a{width:100%;height:auto;float:left;font-size:1em;line-height:2em;font-weight:500;color:#000;text-decoration:none;overflow:hidden;text-overflow: ellipsis;white-space:nowrap;}
+.postMain ul li div{width:100%;height:auto;float:left;}
+.postMain ul li div span{float:left;font-size:0.8em;color:#9c9c9c;}
+.postMain ul li div font{float:right;font-size:0.8em;color:#0a43ac;}
+.delPicBtn{color:#0a43ac;float:left;font-size:0.9em;}
 @media screen and (max-width: 320px){  body{font-size:85.33%} }
 @media screen and (max-width: 360px){  body{font-size:96%}  }
 @media screen and (min-width: 412px){  body{font-size:110%}  }

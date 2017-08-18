@@ -5,12 +5,13 @@ import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
 import com.onway.web.module.Config;
 import com.onway.web.module.request.AddUserRequest;
-import com.onway.web.module.response.AddUserResponse;
+import com.onway.web.module.request.SelectByIdRequest;
 import com.onway.web.module.response.AddUserResponseList;
 import com.onway.web.module.response.Response;
-import com.onway.web.module.response.ResponseList;
 import com.onway.web.pojo.User;
+import com.onway.web.pojo.UserPathPojo;
 import com.onway.web.pojo.UserPojo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -72,11 +73,30 @@ public class DemoApplication extends BaseAction{
         Instant instant = dateNow.atStartOfDay().atZone(zone).toInstant();
         Date date=Date.from(instant);
         Gson gson = new Gson();
-        userDao.insert(id,"www.baidu.com","www.baidu.com","www.baidu.com","www.baidu.com", date,"www.baidu.com","www.baidu.com","www.baidu.com");
+        userDao.insert("www.baidu.com","","www.baidu.com","www.baidu.com", date,"www.baidu.com","www.baidu.com","","","");
         //System.out.println(gson.toJson(userPath));
         return "hello world!";
     }
-
+    @RequestMapping("/update")
+    public void update(@Param("id")int id, @Param("userPath")String userPath,
+                           @Param("userUrl")String userUrl, @Param("userTitle")String userTitle,
+                           @Param("userAuthor")String userAuthor, @Param("userDate")String userDate,
+                           @Param("userQrcode")String userQrcode, @Param("cell")String cell,
+                           @Param("userFullAd")String userFullAd, @Param("userBottomAd")String userBottomAd,
+                           @Param("userBottomText")String userBottomText){
+        Date date=null;
+        if(userDate.length()!=0){
+            date=new Date(userDate);
+        }
+        userDao.update(id,userPath,userUrl,userTitle,userAuthor,date,userQrcode,cell,userFullAd,userBottomAd,userBottomText);
+    }
+    @RequestMapping("/selectById")
+    public Response selectById(SelectByIdRequest request){
+        Response response = new Response(request);
+        UserPathPojo userPath =userDao.selectById(1);
+        response.setData(userPath);
+        return response;
+    }
     @RequestMapping("/addUser")
     public Response getRediect(AddUserRequest request){
 
