@@ -30,9 +30,9 @@ public class GetUrlController extends BaseAction{
     //图片保存路径
     //private static final String saveImgPath="E://imgs";
     //private static final String htmlPath="192.168.0.130:8090/";
-    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
-//    private static final String relativelyPath="/usr/local/wx_resource/";
-//    private static final String UrlPath="http://weixin.puyuekeji.com:8098/";
+//    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
+    private static final String relativelyPath="/usr/local/wx_resource/";
+    private static final String UrlPath="http://weixin.puyuekeji.com:8098/";
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final String timestamp=String.valueOf(System.currentTimeMillis());
     private static final int id=1;
@@ -186,9 +186,9 @@ public class GetUrlController extends BaseAction{
             //生成带广告的广告页面
             File newFile = new File(relativelyPath+dirPath+"/"+fileName);
             FileUtils.writeByteArrayToFile(newFile,String.valueOf(doc).getBytes());
-//            Runtime.getRuntime().exec("chmod -R 755 " + relativelyPath);
-//            String returnPath=UrlPath+dirPath+"/"+fileName;
-            String returnPath=dirPath+"/"+fileName;
+            Runtime.getRuntime().exec("chmod -R 755 " + relativelyPath);
+            String returnPath=UrlPath+dirPath+"/"+fileName;
+//            String returnPath=dirPath+"/"+fileName;
 
             return returnPath;
         } catch (IOException e) {

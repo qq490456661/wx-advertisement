@@ -24,8 +24,8 @@ import java.util.Map;
  */
 @Controller
 public class UploadUtile {
-    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
-//    private static final String relativelyPath="/usr/local/wx_resource/";
+//    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
+    private static final String relativelyPath="/usr/local/wx_resource/";
     private static final String images="http://weixin.puyuekeji.com:8098/images/";
     private int id=1;
     @Autowired
@@ -131,8 +131,8 @@ public class UploadUtile {
                 if(num=="0"){
                     fileName="QuickMark"+timestamp+".jpg";
                     filePath=relativelyPath+"images/QuickMark/"+String.valueOf(day)+"/"+fileName;
-//                    String path=images+"QuickMark/"+String.valueOf(day)+"/"+fileName;
-                    String path="../../images/QuickMark/"+String.valueOf(day)+"/"+fileName;
+                    String path=images+"QuickMark/"+String.valueOf(day)+"/"+fileName;
+//                    String path="../../images/QuickMark/"+String.valueOf(day)+"/"+fileName;
                     userPath=userDao.selectById(id);
                     if(userPath==null){
                         userDao.insert("",links,title,author,date,path,tel,"","",bottomText);
@@ -142,8 +142,8 @@ public class UploadUtile {
                 }else if(num=="1"){
                     fileName="BottomAd"+timestamp+".jpg";
                     filePath=relativelyPath+"images/BottomAd/"+String.valueOf(day)+"/"+fileName;
-//                    String path=images+"BottomAd/"+String.valueOf(day)+"/"+fileName;
-                    String path="../../images/BottomAd/"+String.valueOf(day)+"/"+fileName;
+                    String path=images+"BottomAd/"+String.valueOf(day)+"/"+fileName;
+//                    String path="../../images/BottomAd/"+String.valueOf(day)+"/"+fileName;
                     userPath=userDao.selectById(id);
                     if(userPath==null){
                         userDao.insert("",links,title,author,date,"",tel,"",path,bottomText);
@@ -155,8 +155,8 @@ public class UploadUtile {
                 }else if(num=="2"){
                     fileName="FullAd"+timestamp+".jpg";
                     filePath=relativelyPath+"images/FullAd/"+String.valueOf(day)+"/"+fileName;
-//                    String path=images+"FullAd/"+String.valueOf(day)+"/"+fileName;
-                    String path="../../images/FullAd/"+String.valueOf(day)+"/"+fileName;
+                    String path=images+"FullAd/"+String.valueOf(day)+"/"+fileName;
+//                    String path="../../images/FullAd/"+String.valueOf(day)+"/"+fileName;
                     userPath=userDao.selectById(id);
                     if(userPath==null){
                         userDao.insert("",links,title,author,date,"",tel,path,"",bottomText);

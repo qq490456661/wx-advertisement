@@ -155,13 +155,12 @@
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.shibboleth.utilities/trustany-ssl -->
+        <!-- https://mvnrepository.com/artifact/net.databinder/dispatch-http_2.9.1 -->
         <dependency>
-            <groupId>net.shibboleth.utilities</groupId>
-            <artifactId>trustany-ssl</artifactId>
-            <version>1.0.0</version>
+            <groupId>net.databinder</groupId>
+            <artifactId>dispatch-http_2.9.1</artifactId>
+            <version>0.8.10</version>
         </dependency>
-
     </dependencies>
    <build>
         <plugins>
