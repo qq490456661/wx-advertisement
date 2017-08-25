@@ -2,6 +2,7 @@ package com.onway.web.controller;
 
 import com.onway.web.controller.base.BaseAction;
 import com.onway.web.dao.UserDao;
+import com.onway.web.module.request.GetHtmlInfoRequest;
 import com.onway.web.module.request.GetSignatureRequest;
 import com.onway.web.module.response.Response;
 import com.onway.web.pojo.UserPathPojo;
@@ -77,47 +78,20 @@ public class GetUrlController extends BaseAction{
         String timestamp=String.valueOf(System.currentTimeMillis());
         UserPathPojo userPathPojo=userDao.selectById(openId);
         HttpSession session = request.getSession();
+        session.setAttribute("oldUrl",url);
         //String url="\"http://mp.weixin.qq.com/s/4k6TOX9EFmhsuiSnQMHmkA\"";
         //String url="http://mp.weixin.qq.com/s/yhKh-5pLKXDxE4rKkVE4cQ";
         // 利用Jsoup获得连接
         String oldTitle="";
         Connection connect = Jsoup.connect(url);
         String name="old"+timestamp+".html";
-        java.util.Map map =new HashMap();
+
         try {
             // 得到Document对象
             Document document = connect.referrer("never").get();
             document.select("meta").last().after("<meta name='referrer' content='never'>");
             System.out.println(document);
-            //查找script
-            Elements e = document.getElementsByTag("script").eq(10);
-            for(Element element:e){
-                System.out.println(e);
-                String[] data = element.data().toString().split("var");
-                for(String variable : data){
-                /*过滤variable为空的数据*/
-                    if(variable.contains("=")){
-                    /*取到满足条件的JS变量*/
-                        if(variable.contains("msg_desc") || variable.contains("msg_title")
-                                || variable.contains("msg_cdn_url")){
 
-                            String[]  kvp = variable.split("=");
-
-                        /*取得JS变量存入map*/
-                            if(!map.containsKey(kvp[0].trim()))
-                                map.put(kvp[0].trim(), kvp[1].trim().substring(0, kvp[1].trim().length()-1).toString());
-                        }
-                    }
-                }
-            }
-            String msgDesc=(String)map.get("msg_desc");
-            String msgTitle=(String)map.get("msg_title");
-            String msgCdnUrl=(String)map.get("msg_cdn_url");
-
-            String desc=msgDesc.substring(1,msgDesc.length()-1);
-            String title=msgTitle.substring(1,msgTitle.length()-1);
-            String cndUrl=msgCdnUrl.substring(1,msgCdnUrl.length());
-            userDao.updateInfo(openId,desc,title,cndUrl);
             // 查找所有img标签
             Elements imgs = document.getElementsByTag("img");
             //修改作者
@@ -363,5 +337,54 @@ public class GetUrlController extends BaseAction{
         response.setData(getSignatureRequest);
         return response;
     }
+    @RequestMapping("/getHtmlInfo.do")
+    public Response getHtmlInfo(HttpServletRequest request, @RequestParam(value = "url") String url
+                                , GetHtmlInfoRequest getHtmlInfoRequest){
+        Response response=new Response(getHtmlInfoRequest);
+        HttpSession session=request.getSession();
+        String openId= (String) session.getAttribute("openId");
+        Connection connect = Jsoup.connect(url);
+        java.util.Map map =new HashMap();
+        //查找script
+        try {
+            Document  document = connect.referrer("never").get();
+            document.select("meta").last().after("<meta name='referrer' content='never'>");
+            Elements e = document.getElementsByTag("script").eq(10);
+            for(Element element:e){
+                System.out.println(e);
+                String[] data = element.data().toString().split("var");
+                for(String variable : data){
+                /*过滤variable为空的数据*/
+                    if(variable.contains("=")){
+                    /*取到满足条件的JS变量*/
+                        if(variable.contains("msg_desc") || variable.contains("msg_title")
+                                || variable.contains("msg_cdn_url")){
 
+                            String[]  kvp = variable.split("=");
+
+                        /*取得JS变量存入map*/
+                            if(!map.containsKey(kvp[0].trim()))
+                                map.put(kvp[0].trim(), kvp[1].trim().substring(0, kvp[1].trim().length()-1).toString());
+                        }
+                    }
+                }
+            }
+            String msgDesc=(String)map.get("msg_desc");
+            String msgTitle=(String)map.get("msg_title");
+            String msgCdnUrl=(String)map.get("msg_cdn_url");
+
+            String desc=msgDesc.substring(1,msgDesc.length()-1);
+            String title=msgTitle.substring(1,msgTitle.length()-1);
+            String cndUrl=msgCdnUrl.substring(1,msgCdnUrl.length());
+            getHtmlInfoRequest.setMsgCdnUrl(cndUrl);
+            getHtmlInfoRequest.setMsgTitle(msgTitle);
+            getHtmlInfoRequest.setMsgDesc(msgDesc);
+            userDao.updateInfo(openId,desc,title,cndUrl);
+            response.setData(getHtmlInfoRequest);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  response;
+    }
 }
