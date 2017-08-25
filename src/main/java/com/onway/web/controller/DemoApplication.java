@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -53,8 +55,8 @@ public class DemoApplication extends BaseAction{
     public String test(){
         Gson gson = new Gson();
         System.out.println(gson.toJson(config));
-        UserPojo userPojoList = userDao.get("zhangsan");
-        System.out.println(gson.toJson(userPojoList));
+//        UserPojo userPojoList = userDao.get("zhangsan");
+        //System.out.println(gson.toJson(userPojoList));
         return "hello world!";
     }
     @RequestMapping("/index.html")
@@ -73,12 +75,12 @@ public class DemoApplication extends BaseAction{
         Instant instant = dateNow.atStartOfDay().atZone(zone).toInstant();
         Date date=Date.from(instant);
         Gson gson = new Gson();
-        userDao.insert("www.baidu.com","","www.baidu.com","www.baidu.com", date,"www.baidu.com","www.baidu.com","","","");
+        //userDao.insert("www.baidu.com","","www.baidu.com","www.baidu.com", date,"www.baidu.com","www.baidu.com","","","");
         //System.out.println(gson.toJson(userPath));
         return "hello world!";
     }
     @RequestMapping("/update")
-    public void update(@Param("id")int id, @Param("userPath")String userPath,
+    public void update(@Param("openId")String openId, @Param("userPath")String userPath,
                            @Param("userUrl")String userUrl, @Param("userTitle")String userTitle,
                            @Param("userAuthor")String userAuthor, @Param("userDate")String userDate,
                            @Param("userQrcode")String userQrcode, @Param("cell")String cell,
@@ -86,14 +88,23 @@ public class DemoApplication extends BaseAction{
                            @Param("userBottomText")String userBottomText){
         Date date=null;
         if(userDate.length()!=0){
-            date=new Date(userDate);
+            if(userDate.length()!=0){
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Long time=new Long(userDate);
+                String d = format.format(time);
+                try {
+                    date = (Date) format.parse(d);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        userDao.update(id,userPath,userUrl,userTitle,userAuthor,date,userQrcode,cell,userFullAd,userBottomAd,userBottomText);
+        userDao.update(openId,userPath,userUrl,userTitle,userAuthor,date,userQrcode,cell,userFullAd,userBottomAd,userBottomText);
     }
     @RequestMapping("/selectById")
-    public Response selectById(SelectByIdRequest request){
+    public Response selectById(SelectByIdRequest request,String openId){
         Response response = new Response(request);
-        UserPathPojo userPath =userDao.selectById(1);
+        UserPathPojo userPath =userDao.selectById(openId);
         response.setData(userPath);
         return response;
     }
@@ -103,16 +114,16 @@ public class DemoApplication extends BaseAction{
         Response response = new Response(request);
 
         List<UserPojo> userPojoList = new ArrayList<UserPojo>();
-        UserPojo userPojo = new UserPojo();
-        userPojo.setUserId("123");
-        userPojo.setUserName("xxxx");
-        userPojo.setGmtCreate(new Date());
-        userPojoList.add(userPojo);
-        UserPojo userPojoa = new UserPojo();
-        userPojoa.setUserId("222");
-        userPojoa.setUserName("gfggg");
-        userPojoa.setGmtCreate(new Date());
-        userPojoList.add(userPojoa);
+//        UserPojo userPojo = new UserPojo();
+//        userPojo.setUserId("123");
+//        userPojo.setUserName("xxxx");
+//        userPojo.setGmtCreate(new Date());
+//        userPojoList.add(userPojo);
+//        UserPojo userPojoa = new UserPojo();
+//        userPojoa.setUserId("222");
+//        userPojoa.setUserName("gfggg");
+//        userPojoa.setGmtCreate(new Date());
+//        userPojoList.add(userPojoa);
 
        /* AddUserResponse addUserResponse = new AddUserResponse();
         addUserResponse.setUserName(userPojo.getUserName());

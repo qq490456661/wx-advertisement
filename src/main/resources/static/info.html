@@ -14,11 +14,19 @@
     <script type="text/javascript" src="../js/jquery-form.js"></script>
 </head>
 <script>
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
     var bottomFlag=false;
+    var openId;
     $(function () {
+        openId=GetQueryString("openId");
         jQuery.ajax({
             url:'selectById',
             type:'post',
+            data:{"openId":openId},
             success:function(r){
                 var data=r.data;
                 console.log(data);
@@ -142,6 +150,7 @@
             <label>微信号</label>
             <input type="text">
         </div>-->
+        <intpu type="hidden" id="openId" name="openId"/>
     </form>
     <div class="infoWarn">
         <p><font>*</font>底部浮动尺寸：600*120像素；二维码尺寸：480*480像素； 全屏广告尺寸：450*800像素。</p>
@@ -151,9 +160,9 @@
 </main>
 <footer>
     <ul>
-        <li><a href="info.html"><img src="../images/icon1_1.png"><span>广告设置</span></a></li>
+        <li><a href="#" onclick="info()"><img src="../images/icon1_1.png"><span>广告设置</span></a></li>
         <li><a href="post.html"><img src="../images/icon2_2.png"><span>已发广告</span></a></li>
-        <li><a href="link.html"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
+        <li><a href="#" onclick="link()"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
     </ul>
 </footer>
 </body>
@@ -246,14 +255,15 @@
         var id=this.id;
         if(id==1){
             jQuery.ajax({
-                url:'selectById',
+                url:'/selectById.do',
                 type:'post',
+                data:{"openId":openId},
                 success:function(r){
                     var data=r.data;
                     jQuery.ajax({
                         url:'update',
                         type:'post',
-                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                        data:{"openId":openId,"userPath":data.userPath,"userUrl":data.userUrl,
                             "userTitle":data.userTitle,"userAuthor":data.userAuthor,
                             "userDate":data.userDate,"userQrcode":"",
                             "cell":data.cell,"userFullAd":data.userFullAd,
@@ -266,14 +276,15 @@
             })
         }else if(id==2){
             jQuery.ajax({
-                url:'selectById',
+                url:'/selectById.do',
                 type:'post',
+                data:{"openId":openId},
                 success:function(r){
                     var data=r.data;
                     jQuery.ajax({
                         url:'update',
                         type:'post',
-                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                        data:{"openId":openId,"userPath":data.userPath,"userUrl":data.userUrl,
                             "userTitle":data.userTitle,"userAuthor":data.userAuthor,
                             "userDate":data.userDate,"userQrcode":data.userQrcode,
                             "cell":data.cell,"userFullAd":data.userFullAd,
@@ -286,14 +297,15 @@
             })
         }else if(id==3){
             jQuery.ajax({
-                url:'selectById',
+                url:'/selectById.do',
                 type:'post',
+                data:{"openId":openId},
                 success:function(r){
                     var data=r.data;
                     jQuery.ajax({
                         url:'update',
                         type:'post',
-                        data:{"id":data.id,"userPath":data.userPath,"userUrl":data.userUrl,
+                        data:{"openId":openId,"userPath":data.userPath,"userUrl":data.userUrl,
                             "userTitle":data.userTitle,"userAuthor":data.userAuthor,
                             "userDate":data.userDate,"userQrcode":data.userQrcode,
                             "cell":data.cell,"userFullAd":"",
@@ -319,6 +331,17 @@
         var value=$("#file2").val();
 
         var bottom=$("#bottomText").val();
+        jQuery.ajax({
+            url: '/selectById.do',
+            type: 'post',
+            data: {"openId": openId},
+            success: function (r) {
+                var data=r.data;
+                if(data.userBottomAd.length!=0){
+                    bottomFlag=true;
+                }
+            }
+        })
         if(bottomFlag==true){
             if(bottom!=""){
                 alert("底部图片和底部滚动文案只能选择其一");
@@ -329,34 +352,17 @@
             async:false,
             url:"upload.do",
             type:"post",
+            data:{"openId":openId},
             success:function(r){
-                window.location.href="link.html";
-//                var data=r.data;
-//                var bottomText=data.bottomText;
-//                var links=data.links;
-//                var author=data.author;
-//                var tel=data.tel;
-//                var title=data.title;
-//                var time=data.time;
-//                var timestamp=data.timestamp;
-//                var status1=data.status1;
-//                var status2=data.status2;
-//                var status3=data.status3;
-//                jQuery.ajax({
-//                    url:"/addAd.do",
-//                    type:"post",
-//                    data:{"tel":tel,"bottomText":bottomText,"links":links,
-//                        "author":author,"title":title,"time":time,
-//                        "timestamp":timestamp,"status1":status1,
-//                        "status2":status2,"status3":status3},
-//                    success:function (r) {
-//
-//                    }
-//                })
-//                console.log(bottomText+links+author+tel);
-//                alert("asdasdas");
+                window.location.href="/link.html?openId="+openId;
             }
         })
+    }
+    function info(){
+        window.location.href="/getUserPath.do?openId="+openId;
+    }
+    function link(){
+        window.location.href="/link.html?openId="+openId;
     }
 </script>
 </html>

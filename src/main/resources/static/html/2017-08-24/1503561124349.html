@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
  <head> 
-  <title id="title"></title> 
+  <title id="title">你们都想不到，其实徐老师私底下是这样的...</title> 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"> 
@@ -10,6 +10,7 @@
   <meta name="format-detection" content="telephone=no"> 
   <link rel="stylesheet" type="text/css" href="../../css/ad.css"> 
   <script src="../../js/jquery-1.8.2.min.js"></script> 
+  <script type="text/JavaScript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
   <style>
 		.ba-ping{width:100%;height:100%;position:fixed;top:0;left:0;z-index:110}
 		.ba-ping >a{width:100%;height:100%;float:left;}
@@ -162,11 +163,11 @@
     <div class="article"> 
      <div class="article-content"> 
       <!--加载文章内容--> 
-      <iframe id="article-iframe" name="article-iframe" height="100%" width="100%" frameborder="0" scrolling="yes" src="yhKh-5pLKXDxE4rKkVE4cQ.html"></iframe> 
+      <iframe id="article-iframe" name="article-iframe" height="100%" width="100%" frameborder="0" scrolling="yes" src="old1503561124349.html"></iframe> 
      </div> 
      <!--二维码--> 
      <div id="qrCodeImg" class="pub-num" style="display: block;"> 
-      <a name="qrCodeImgLink"><img id="pub-num" src="E:\Wx正式项目\wx-advertisement/src/main/resources/static/images/QuickMark/2017-08-17/QuickMark1502957269930.jpg" style="width: 100%;"></a> 
+      <a name="qrCodeImgLink"><img id="pub-num" src="http://weixin.puyuekeji.com/images/QuickMark/2017-08-24/QuickMark1503542237794.jpg" style="width: 100%;"></a> 
      </div> 
     </div> 
    </div> 
@@ -175,7 +176,7 @@
     <a id="fullImgLink" href=""> 
      <div class="img-box"> 
       <input type="hidden" id="flagAd" value="1"> 
-      <img id="fullImg" src="E:\Wx正式项目\wx-advertisement/src/main/resources/static/images/FullAd/2017-08-17/FullAd1502957269930.jpg"> 
+      <img id="fullImg" src="http://weixin.puyuekeji.com/images/FullAd/2017-08-24/FullAd1503542205979.jpg"> 
      </div> </a> 
     <div class="time-box"> 
      <span><span class="time">3</span>秒关闭</span> 
@@ -201,11 +202,14 @@
      <a class="wechat-link" id=""><img class="icon-img" src="../../images/wechat_icon.png"></a> 
     </div> 
     <div class="ad-link-box" id="adImgDiv"> 
-     <a id="adLink" class="ad-link" href="http://www.baidu.com"> <img id="adImg" class="ad-img" src="E:\Wx正式项目\wx-advertisement/src/main/resources/static/images/BottomAd/2017-08-17/BottomAd1502957269930.jpg">  </a> 
+     <a id="adLink" class="ad-link" href=""> <img id="adImg" class="ad-img" src="http://weixin.puyuekeji.com/images/BottomAd/2017-08-24/BottomAd1503542237794.jpg">  </a> 
     </div> 
    </div> 
   </div>  
   <script>
+	var nonceStr;
+	var timestamp;
+	var signature;
     $(function(){
         $("#article-iframe").load(function(){
             var video=$(this).contents().find("iframe");
@@ -213,9 +217,78 @@
             video.css("display","block");
             video.attr("src",videoSrc);
             $(this).contents().find(".img_loading").hide();
-        })
+            $(this).css("width","300px");
 
+        })
     })
+	$(function(){
+	    jQuery.ajax({
+			url:'/getSignature.do',
+			type:'post',
+            async: false,
+			success:function(r){
+				var data=r.data;
+				timestamp=data.timestamp;
+				nonceStr=data.nonceStr;
+				signature=data.signature;
+				//cosnole.log(data.signature)
+
+                wx.config({
+                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: 'wxa16425d3780729a5', // 必填，公众号的唯一标识
+                    timestamp: timestamp, // 必填，生成签名的时间戳
+                    nonceStr: nonceStr, // 必填，生成签名的随机串
+                    signature: signature,// 必填，签名，见附录1
+                    jsApiList: [
+                        'checkJsApi',
+                        'onMenuShareTimeline',
+                        'onMenuShareAppMessage',
+                        'onMenuShareQQ',
+                        'onMenuShareWeibo',
+                        'chooseWXPay'
+                    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                });
+
+                wx.ready(function () {
+                    wx.onMenuShareTimeline({
+                        title: '标题1', // 分享标题
+                        link: 'http://www.baidu.com', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        imgUrl: '{$url}__PUBLIC__/Uploads/{$goodsvo.image}', // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                            alert('分享成功');
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    wx.error(function(res){
+                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                        alert("errorMSG:"+res);
+                    });
+                });
+                wx.onMenuShareAppMessage({
+                    title: '标题2', // 分享标题
+                    desc: '描述描述', // 分享描述
+                    link: '', // 分享链接
+                    imgUrl: '', // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            }
+		})
+
+
+	})
+
+
+
 </script> 
  </body>
 </html>

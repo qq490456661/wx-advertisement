@@ -25,9 +25,9 @@ import java.util.Map;
 @Controller
 public class UploadUtile {
 //    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
-    private static final String relativelyPath="/usr/local/wx_resource/";
-    private static final String images="http://weixin.puyuekeji.com:8098/images/";
-    private int id=1;
+    private static final String relativelyPath="/usr/local/apache-tomcat-8.5.20/webapps/";
+    private static final String images="http://weixin.puyuekeji.com/images/";
+    //private String openId="1";
     @Autowired
     private UserDao userDao;
     @RequestMapping("/upload.do")
@@ -41,7 +41,8 @@ public class UploadUtile {
                               @RequestParam(value ="tel" ,required = false) String tel,
                               @RequestParam(value ="title" ,required = false) String title,
                               @RequestParam(value ="time" ,required = false) String time,
-                              SelectByIdRequest request
+                              SelectByIdRequest request,
+                              @RequestParam(value ="openId" ,required = false) String openId
                           ) throws ParseException {
         String timestamp=String.valueOf(System.currentTimeMillis());
         Response response=new Response(request);
@@ -52,11 +53,11 @@ public class UploadUtile {
                 MultipartFile file = files[i];
                 // 保存文件
                 if(i==0&files[i]!=null){
-                    list = saveFile(file, list,"0",bottomText,links,author,tel,title,time,timestamp);
+                    list = saveFile(file, list,"0",bottomText,links,author,tel,title,time,timestamp,openId);
                 }else if(i==1&files[i]!=null){
-                    list = saveFile(file, list,"1",bottomText,links,author,tel,title,time,timestamp);
+                    list = saveFile(file, list,"1",bottomText,links,author,tel,title,time,timestamp,openId);
                 }else if(i==2&files[i]!=null){
-                    list = saveFile(file, list,"2",bottomText,links,author,tel,title,time,timestamp);
+                    list = saveFile(file, list,"2",bottomText,links,author,tel,title,time,timestamp,openId);
                 }else if(files[i]==null){
                 }
 
@@ -68,11 +69,11 @@ public class UploadUtile {
             date = format.parse(time);
         }
         UserPathPojo userPath;
-        userPath=userDao.selectById(id);
+        userPath=userDao.selectById(openId);
         if(userPath==null){
-            userDao.insert("",links,title,author,date,userPath.getUserQrcode(),tel,"","",bottomText);
+            userDao.insert(openId,userPath.getUserPath(),links,title,author,date,userPath.getUserQrcode(),tel,"","",bottomText);
         }else{
-            userDao.update(id,userPath.getUserPath(),links,title, author,date,userPath.getUserQrcode(),tel
+            userDao.update(openId,userPath.getUserPath(),links,title, author,date,userPath.getUserQrcode(),tel
                     ,userPath.getUserFullAd(),userPath.getUserBottomAd(),bottomText);
         }
 
@@ -110,7 +111,8 @@ public class UploadUtile {
     }
     private List<String> saveFile(MultipartFile file, List<String> list,
                                   String num,String bottomText,String links,
-                                  String author,String tel, String title,String time,String timestamp) {
+                                  String author,String tel, String title,String time,
+                                  String timestamp,String openId) {
 
 
         UserPathPojo userPath;
@@ -133,22 +135,22 @@ public class UploadUtile {
                     filePath=relativelyPath+"images/QuickMark/"+String.valueOf(day)+"/"+fileName;
                     String path=images+"QuickMark/"+String.valueOf(day)+"/"+fileName;
 //                    String path="../../images/QuickMark/"+String.valueOf(day)+"/"+fileName;
-                    userPath=userDao.selectById(id);
+                    userPath=userDao.selectById(openId);
                     if(userPath==null){
-                        userDao.insert("",links,title,author,date,path,tel,"","",bottomText);
+                        userDao.insert(openId,"",links,title,author,date,path,tel,"","",bottomText);
                     }else{
-                        userDao.update(id,userPath.getUserPath(),links,title, author,date,path,tel
+                        userDao.update(openId,userPath.getUserPath(),links,title, author,date,path,tel
                                 ,userPath.getUserFullAd(),userPath.getUserBottomAd(),bottomText);}
                 }else if(num=="1"){
                     fileName="BottomAd"+timestamp+".jpg";
                     filePath=relativelyPath+"images/BottomAd/"+String.valueOf(day)+"/"+fileName;
                     String path=images+"BottomAd/"+String.valueOf(day)+"/"+fileName;
 //                    String path="../../images/BottomAd/"+String.valueOf(day)+"/"+fileName;
-                    userPath=userDao.selectById(id);
+                    userPath=userDao.selectById(openId);
                     if(userPath==null){
-                        userDao.insert("",links,title,author,date,"",tel,"",path,bottomText);
+                        userDao.insert(openId,"",links,title,author,date,"",tel,"",path,bottomText);
                     }else{
-                        userDao.update(id,userPath.getUserPath(),links,title,
+                        userDao.update(openId,userPath.getUserPath(),links,title,
                                 author,date,userPath.getUserQrcode(),tel
                                 ,userPath.getUserFullAd(),path,bottomText);
                     }
@@ -157,11 +159,11 @@ public class UploadUtile {
                     filePath=relativelyPath+"images/FullAd/"+String.valueOf(day)+"/"+fileName;
                     String path=images+"FullAd/"+String.valueOf(day)+"/"+fileName;
 //                    String path="../../images/FullAd/"+String.valueOf(day)+"/"+fileName;
-                    userPath=userDao.selectById(id);
+                    userPath=userDao.selectById(openId);
                     if(userPath==null){
-                        userDao.insert("",links,title,author,date,"",tel,path,"",bottomText);
+                        userDao.insert(openId,"",links,title,author,date,"",tel,path,"",bottomText);
                     }else{
-                        userDao.update(id,userPath.getUserPath(),links,title,
+                        userDao.update(openId,userPath.getUserPath(),links,title,
                                 author,date,userPath.getUserQrcode(),tel
                                 ,path,userPath.getUserBottomAd(),bottomText);}
                 }

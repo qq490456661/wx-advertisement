@@ -12,7 +12,6 @@ spring:
     content-type: text/html
   http:
     encoding:
-      charset: UTF-8
-      enabled: true
+      force: true
   application:
     name: wx

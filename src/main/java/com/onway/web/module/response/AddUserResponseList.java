@@ -13,8 +13,8 @@ public class AddUserResponseList extends ResponseList<AddUserResponseList.UserVi
     public void toResponse(List<UserPojo> userPojos){
         for(UserPojo a : userPojos){
             UserView userView = new UserView();
-            userView.setUserId(a.getUserId());
-            userView.setUserName(a.getUserName());
+//            userView.setUserId(a.getUserId());
+//            userView.setUserName(a.getUserName());
             getList().add(userView);
         }
     }
