@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +87,7 @@ public class GetOpenIdController {
                         System.out.println("get请求结果openid:" + openId);
                         //获取AccessToken
                         String access_token= (String) session.getAttribute("access_token");
-                        if(session.getAttribute("access_token")==null){
+                        if(access_token==null|| access_token.length()==0){
                             access_token=getAccessToken();
                             session.setAttribute("access_token",access_token);
                         }
@@ -121,11 +122,11 @@ public class GetOpenIdController {
         }
         UserPojo userPojo=userDao.selectUserById(openId);
         try {
-            httpServletRequest.setAttribute("nickname",userPojo.getNickName());
             httpServletResponse.sendRedirect("/link.html?openId="+userPojo.getOpenId());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
     @RequestMapping("/getSignature.do")
     @ResponseBody

@@ -14,28 +14,99 @@
 </head>
 <body>
 <main class="postMain">
-    <ul>
-        <li>
-            <a href="index2.html">hi啊还是地方分开来赶紧打可将该到平均公平大概就到覅估计加的佛教都安排就哦我，1</a>
-            <div><span>时间：2017-08-14 15:23:34</span><font class="delBtn">删除</font></div>
-        </li>
-        <li>
-            <a href="">hi啊还是地方分开来赶紧打可将该到平均公平大概就到覅估计加的佛教都安排就哦我，1</a>
-            <div><span>时间：2017-08-13 12:22:24</span><font  class="delBtn">删除</font></div>
-        </li>
+    <ul id="vessel">
+
     </ul>
 </main>
 <footer>
     <ul>
-        <li><a href="info.html"><img src="../images/icon1_2.png"><span>广告设置</span></a></li>
-        <li><a href="post.html"><img src="../images/icon2_1.png"><span>已发广告</span></a></li>
-        <li><a href="/getOpenId.do"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
+        <li><a href="#" onclick="info()"><img src="../images/icon1_2.png"><span>广告设置</span></a></li>
+        <li><a href="#" onclick="post()"><img src="../images/icon2_1.png"><span>已发广告</span></a></li>
+        <li><a href="#" onclick="link()"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
     </ul>
 </footer>
 </body>
 <script type="text/javascript">
+    var openId=GetQueryString("openId");
     $(".delBtn").click(function(){
+        console.log(this);
+        console.log($(this));
         $(this).parents("li").remove();
     })
+    function btn(id){
+        if (confirm("你确定删除吗？")) {
+        var li=document.getElementById(id);
+        $(li).parents("li").remove();
+            jQuery.ajax({
+                url:'deleteUserShareById.do',
+                type:'post',
+                data:{"id":id},
+                success:function(r){
+                }
+            })
+        }
+    }
+    $(function(){
+        var ul=$("#vessel");
+        jQuery.ajax({
+            type:'post',
+            url:'/selectUserShareByOpenId.do',
+            data:{"openId":openId},
+            success:function(r){
+                var data=r.data;
+                var list =data.list;
+                console.log(data);
+                console.log(list);
+                console.log(list.length);
+                for (var i=0;i<list.length;i++){
+                    var title=list[i].title;
+                    title=title.substring(1,title.length-1);
+                    var li='<li><a href="'+list[i].url+'">'+title+'</a>' +
+                        '<div><span>时间：'+jsonTimeStamp(list[i].date)+'</span><font class="delBtn" id="'+list[i].id+'" onclick="btn('+list[i].id+')">删除</font></div></li>';
+                    //console.log(li);
+                    //ul.appendChild(li);
+                    console.log(li);
+                    ul.append(li);
+                }
+            }
+        })
+    })
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    function jsonTimeStamp(milliseconds) {
+        if (milliseconds != "" && milliseconds != null
+            && milliseconds != "null") {
+            var datetime = new Date();
+            datetime.setTime(milliseconds);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0"
+                + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate()
+                : datetime.getDate();
+            var hour = datetime.getHours() < 10 ? "0" + datetime.getHours()
+                : datetime.getHours();
+            var minute = datetime.getMinutes() < 10 ? "0"
+                + datetime.getMinutes() : datetime.getMinutes();
+            var second = datetime.getSeconds() < 10 ? "0"
+                + datetime.getSeconds() : datetime.getSeconds();
+            return year + "-" + month + "-" + date;
+        } else {
+            return "";
+        }
+
+    }
+    function info(){
+        window.location.href="/getUserPath.do?openId="+openId;
+    }
+    function link(){
+        window.location.href="/link.html?openId="+openId;
+    }
+    function post(){
+        window.location.href="/post.html?openId="+openId;
+    }
 </script>
 </html>

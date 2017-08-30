@@ -246,6 +246,11 @@ public class GetUrlController extends BaseAction{
         return "";
     }
 
+    /**
+     *
+     * 根据appId和appSecret换取accessToken
+     * @return
+     */
     public String  getAccessToken(){
         String access_token = "";
         String aturl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + AppId
@@ -270,6 +275,11 @@ public class GetUrlController extends BaseAction{
         return access_token;
     }
 
+    /**
+     * 根据accessToken换取Ticket
+     * @param access_token
+     * @return
+     */
     public static String getTicket(String access_token) {
         String ticket = null;
         String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+ access_token +"&type=jsapi";//这个url链接和参数不能变
@@ -288,6 +298,11 @@ public class GetUrlController extends BaseAction{
         return ticket;
     }
 
+    /**
+     * SHA1加密
+     * @param decript
+     * @return
+     */
     public static String SHA1(String decript) {
         try {
             MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
@@ -310,6 +325,16 @@ public class GetUrlController extends BaseAction{
         }
         return "";
     }
+
+    /**
+     * 根据ticket,noncestr,timestamp,Url,换取signature
+     * @param request
+     * @param getSignatureRequest
+     * @param timestamp
+     * @param noncestr
+     * @param jsUrl
+     * @return
+     */
     @RequestMapping("/encryption.do")
     public Response encryption(HttpServletRequest request,GetSignatureRequest getSignatureRequest,
                                @RequestParam(value ="timestamp") String timestamp,
@@ -372,7 +397,6 @@ public class GetUrlController extends BaseAction{
             String msgDesc=(String)map.get("msg_desc");
             String msgTitle=(String)map.get("msg_title");
             String msgCdnUrl=(String)map.get("msg_cdn_url");
-
             String desc=msgDesc.substring(1,msgDesc.length()-1);
             String title=msgTitle.substring(1,msgTitle.length()-1);
             String cndUrl=msgCdnUrl.substring(1,msgCdnUrl.length());

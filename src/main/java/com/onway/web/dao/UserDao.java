@@ -3,10 +3,12 @@ package com.onway.web.dao;
 import com.onway.web.pojo.User;
 import com.onway.web.pojo.UserPathPojo;
 import com.onway.web.pojo.UserPojo;
+import com.onway.web.pojo.UserSharePojo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/8/6 0006.
@@ -167,4 +169,20 @@ public interface UserDao{
                            @Param("accoessToken") String accoessToken,
                            @Param("gmtStartTime") Date gmtStartTime,@Param("gmtEndTime") Date gmtEndTime);
 
+    @Insert("insert into cif_share(open_id,title,date,url) value(#{openId},#{title},#{date},#{url})")
+    public void insertUserShare(@Param("openId") String openId,@Param("title") String title,
+                                @Param("date") Date date,@Param("url") String url);
+
+    @Select("select * from cif_share where open_id=#{openId}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "openId", column = "open_id"),
+            @Result(property = "title",column = "title"),
+            @Result(property = "date",column = "date"),
+            @Result(property = "url",column = "url")
+    })
+    public List<UserSharePojo> selectUserShareByOpenId(@Param("openId") String openId);
+
+    @Delete("delete from cif_share where id=#{id}")
+    public void deleteUserShareById(@Param("id") int id);
 }

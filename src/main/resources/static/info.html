@@ -14,15 +14,17 @@
     <script type="text/javascript" src="../js/jquery-form.js"></script>
 </head>
 <script>
+    var image1=false;
+    var image2=false;
+    var image3=false;
+    var bottomFlag=false;
+    var openId=GetQueryString("openId");
     function GetQueryString(name){
         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if(r!=null)return  unescape(r[2]); return null;
     }
-    var bottomFlag=false;
-    var openId;
     $(function () {
-        openId=GetQueryString("openId");
         jQuery.ajax({
             url:'selectById',
             type:'post',
@@ -161,7 +163,7 @@
 <footer>
     <ul>
         <li><a href="#" onclick="info()"><img src="../images/icon1_1.png"><span>广告设置</span></a></li>
-        <li><a href="post.html"><img src="../images/icon2_2.png"><span>已发广告</span></a></li>
+        <li><a href="#" onclick="post()"><img src="../images/icon2_2.png"><span>已发广告</span></a></li>
         <li><a href="#" onclick="link()"><img src="../images/icon3_2.png"><span>会员中心</span></a></li>
     </ul>
 </footer>
@@ -187,6 +189,13 @@
         file: '#file1',
         view: '#preview1',
         ok: '#clipBtn1',
+        outputQuality:0.5,
+//        lrzOption: {
+//            width:  600 ,
+//            height:  800 ,
+//            quality: .1
+//        },
+
         loadStart: function() {
             console.log('开始读取照片');
         },
@@ -196,6 +205,7 @@
         },
         done: function(dataURL) {
             console.log(dataURL);
+            image1=true;
         },
         fail: function(msg) {
             alert(msg);
@@ -208,6 +218,13 @@
         file: '#file2',
         view: '#preview2',
         ok: '#clipBtn2',
+        outputQuality:0.5,
+//        lrzOption: {
+//            width:  600 ,
+//            height:  800 ,
+//            quality: .1
+//        },
+
         loadStart: function() {
             console.log('开始读取照片');
         },
@@ -217,18 +234,26 @@
         },
         done: function(dataURL) {
             console.log(dataURL);
+            image2=true;
         },
         fail: function(msg) {
             alert(msg);
         }
     });
-    var pc2 = new PhotoClip('#clipArea3', {
+    var pc3 = new PhotoClip('#clipArea3', {
         size: [0.56*screenH,screenH],
         outputSize: [0,0],
 //		adaptive: ['60%', '80%'],
         file: '#file3',
         view: '#preview3',
         ok: '#clipBtn3',
+        outputQuality:0.5,
+//        lrzOption: {
+//            width:  600 ,
+//            height:  800 ,
+//            quality: .1
+//        },
+
         loadStart: function() {
             console.log('开始读取照片');
         },
@@ -238,6 +263,7 @@
         },
         done: function(dataURL) {
             console.log(dataURL);
+            image3=true;
         },
         fail: function(msg) {
             alert(msg);
@@ -255,7 +281,7 @@
         var id=this.id;
         if(id==1){
             jQuery.ajax({
-                url:'/selectById.do',
+                url:'/selectById',
                 type:'post',
                 data:{"openId":openId},
                 success:function(r){
@@ -276,7 +302,7 @@
             })
         }else if(id==2){
             jQuery.ajax({
-                url:'/selectById.do',
+                url:'/selectById',
                 type:'post',
                 data:{"openId":openId},
                 success:function(r){
@@ -297,7 +323,7 @@
             })
         }else if(id==3){
             jQuery.ajax({
-                url:'/selectById.do',
+                url:'/selectById',
                 type:'post',
                 data:{"openId":openId},
                 success:function(r){
@@ -328,8 +354,26 @@
     })
     function commit(){
         //var value =document.getElementsByName("preview2").value;
-        var value=$("#file2").val();
-
+//        var file1 = document.getElementById("file1");
+//        var file2 = document.getElementById("file2");
+//        var file3 = document.getElementById("file3");
+        //读取图片数据
+        for (var i=1;i<4;i++){
+            var file = document.getElementById("file"+i);
+            var f = file.files[0];
+            if(f!=null){
+                if(f.size>102400){
+                    if(i=="1"){
+                        alert("二维码图片大于100KB,请更换！！");
+                    }else if(i=="2"){
+                        alert("底部图片大于100KB,请更换！！");
+                    }else if(i=="3"){
+                        alert("全屏图片大于100KB,请更换！！");
+                    }
+                    return;
+                }
+            }
+        }
         var bottom=$("#bottomText").val();
         jQuery.ajax({
             url: '/selectById.do',
@@ -342,6 +386,26 @@
                 }
             }
         })
+
+        var image1Path="";
+        var image2Path="";
+        var image3Path="";
+        if(image1){
+            image1Path=$("#preview1").css("background-image");
+            var arr=image1Path.split(",");
+            image1Path=arr[1];
+        }
+        if(image2){
+            image2Path=$("#preview2").css("background-image");
+            var arr=image2Path.split(",");
+            image2Path=arr[1];
+            bottomFlag=true;
+        }
+        if(image3){
+            image3Path=$("#preview3").css("background-image");
+            var arr=image3Path.split(",");
+            image3Path=arr[1];
+        }
         if(bottomFlag==true){
             if(bottom!=""){
                 alert("底部图片和底部滚动文案只能选择其一");
@@ -350,9 +414,9 @@
         }
         $("#info").ajaxSubmit({
             async:false,
-            url:"upload.do",
+            url:"/uploadImage.do",
             type:"post",
-            data:{"openId":openId},
+            data:{"openId":openId,"image1Path":image1Path,"image2Path":image2Path,"image3Path":image3Path},
             success:function(r){
                 window.location.href="/link.html?openId="+openId;
             }
@@ -364,5 +428,9 @@
     function link(){
         window.location.href="/link.html?openId="+openId;
     }
+    function post(){
+        window.location.href="/post.html?openId="+openId;
+    }
+
 </script>
 </html>

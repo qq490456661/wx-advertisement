@@ -38,11 +38,13 @@ public class GetUserInfoController {
     public Response selectById(SelectByIdRequest selectByIdRequest,HttpServletRequest request){
         Response response=new Response(selectByIdRequest);
         String openId="";
+        //openId="oJpmfwUN1cFIdo0inxFwCaE6Uboo";
         openId=request.getParameter("openId");
         if(openId.length()==0){
             HttpSession session=request.getSession();
             openId= (String) session.getAttribute("openId");
         }
+
         UserPathPojo userPathPojo=userDao.selectById(openId);
         selectByIdRequest.setOpenId(userPathPojo.getOpenId());
         selectByIdRequest.setTimestamp(userPathPojo.getTimestamp());

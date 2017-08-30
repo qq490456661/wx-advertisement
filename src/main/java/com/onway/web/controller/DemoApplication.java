@@ -108,6 +108,10 @@ public class DemoApplication extends BaseAction{
         response.setData(userPath);
         return response;
     }
+//    @RequestMapping("/selectUser")
+//    public Response selectUserById(){
+//        Response
+//    }
     @RequestMapping("/addUser")
     public Response getRediect(AddUserRequest request){
 
