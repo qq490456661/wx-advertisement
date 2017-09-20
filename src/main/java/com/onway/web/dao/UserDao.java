@@ -169,7 +169,7 @@ public interface UserDao{
                            @Param("accoessToken") String accoessToken,
                            @Param("gmtStartTime") Date gmtStartTime,@Param("gmtEndTime") Date gmtEndTime);
 
-    @Insert("insert into cif_share(open_id,title,date,url) value(#{openId},#{title},#{date},#{url})")
+    @Insert("insert into cif_share(open_id,title,date,url,ty) value(#{openId},#{title},#{date},#{url})")
     public void insertUserShare(@Param("openId") String openId,@Param("title") String title,
                                 @Param("date") Date date,@Param("url") String url);
 

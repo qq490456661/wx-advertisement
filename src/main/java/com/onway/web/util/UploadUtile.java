@@ -203,35 +203,34 @@ public class UploadUtile {
                             @RequestParam(value ="time" ,required = false) String time,
                             @RequestParam(value ="openId" ,required = false) String openId){
 
-        if(image1Path.length()<102400&&image2Path.length()<102400&&image3Path.length()<102400){
-
-        String timestamp=String.valueOf(System.currentTimeMillis());
-        java.util.Date date=null;
-        if (time.length()!=0){
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                date = format.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if(image1Path.length()<204800&&image2Path.length()<204800&&image3Path.length()<204800){
+            String timestamp=String.valueOf(System.currentTimeMillis());
+            java.util.Date date=null;
+            if (time.length()!=0){
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    date = format.parse(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        UserPathPojo userPath;
-        userPath=userDao.selectById(openId);
-        if(userPath==null){
-            userDao.insert(openId,userPath.getUserPath(),links,title,author,date,userPath.getUserQrcode(),tel,"","",bottomText);
-        }else{
-            userDao.update(openId,userPath.getUserPath(),links,title, author,date,userPath.getUserQrcode(),tel
-                    ,userPath.getUserFullAd(),userPath.getUserBottomAd(),bottomText);
-        }
-        if(image1Path.length()!=0&&image1Path!=null){
-            base64StringToImage(image1Path,"1",bottomText,links,author,tel,title,time,timestamp,openId);
-        }
-        if(image2Path.length()!=0&&image2Path!=null){
-            base64StringToImage(image2Path,"2",bottomText,links,author,tel,title,time,timestamp,openId);
-        }
-        if(image3Path.length()!=0&&image3Path!=null){
-            base64StringToImage(image3Path,"3",bottomText,links,author,tel,title,time,timestamp,openId);
-        }
+            UserPathPojo userPath;
+            userPath=userDao.selectById(openId);
+            if(userPath==null){
+                userDao.insert(openId,userPath.getUserPath(),links,title,author,date,userPath.getUserQrcode(),tel,"","",bottomText);
+            }else{
+                userDao.update(openId,userPath.getUserPath(),links,title, author,date,userPath.getUserQrcode(),tel
+                        ,userPath.getUserFullAd(),userPath.getUserBottomAd(),bottomText);
+            }
+            if(image1Path.length()!=0&&image1Path!=null){
+                base64StringToImage(image1Path,"1",bottomText,links,author,tel,title,time,timestamp,openId);
+            }
+            if(image2Path.length()!=0&&image2Path!=null){
+                base64StringToImage(image2Path,"2",bottomText,links,author,tel,title,time,timestamp,openId);
+            }
+            if(image3Path.length()!=0&&image3Path!=null){
+                base64StringToImage(image3Path,"3",bottomText,links,author,tel,title,time,timestamp,openId);
+            }
         }else{
 
         }

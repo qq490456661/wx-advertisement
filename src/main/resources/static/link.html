@@ -21,6 +21,7 @@
     </div>
     <input type="text" id="text" placeholder="在这里粘贴原文链接">
     <input class="linkSubBtn" type="button" value="点击提交" onclick="commit()">
+    <a href="test.html">跳转测试页</a>
 </main>
 <footer>
     <ul>
@@ -68,18 +69,19 @@
     }
     function commit(){
         var url =$("#text").val();
-        if(url.indexOf("http://mp.weixin.qq.com/s")==-1){
+        if(url.indexOf("http://mp.weixin.qq.com/s")==-1&&url.indexOf("http://api.woshipm.com")==-1){
             alert("该来源文章暂不支持!");
             return;
         }
         jQuery.ajax({
             url:'getUrl.do',
             type:'post',
-            data:{"url":url,"openId":openId,"signature":signature,"timestamp":timestamp,"nonceStr":nonceStr},
+            data:{"url":url,"openId":openId},
             success:function(r){
                 window.location.href=r;
             }
         })
+
     }
 </script>
 </html>

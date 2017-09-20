@@ -12,6 +12,19 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="../js/jquery-form.js"></script>
+    <style type="text/css">
+        .mask {
+            width:100%;height:100%;overflow:hidden;
+            position: absolute; top: 0px;left: 0px;z-index: 100;
+            opacity:0.8; -moz-opacity:0.8;filter: alpha(opacity=80);
+            background-color: #fff;
+            display: none;
+
+        }
+        .mask >img{width:400px;heigh:300px;position:absolute;top:50%;left:50%;margin-top:-150px;margin-left:-200px;
+            opacity:0.8; -moz-opacity:0.8;filter: alpha(opacity=80);
+        }
+    </style>
 </head>
 <script>
     var image1=false;
@@ -81,8 +94,21 @@
         }
 
     }
+    function showMask(){
+        /*            $("#mask").css("height",$(document).height());
+         $("#mask").css("width",$(document).width());*/
+        $("#mask").show();
+    }
+    //隐藏遮罩层
+    function hideMask(){
+        $("#mask").hide();
+    }
 </script>
 <body>
+<div id="mask" class="mask" >
+    <img src="images/background.gif">
+</div>
+<!--<a href="javascript:void(0);" onclick="showMask()" >点我显示遮罩层</a><br />-->
 <main class="infoMain">
     <form class="info" id="info">
         <div>
@@ -362,13 +388,13 @@
             var file = document.getElementById("file"+i);
             var f = file.files[0];
             if(f!=null){
-                if(f.size>102400){
+                if(f.size>204800){
                     if(i=="1"){
-                        alert("二维码图片大于100KB,请更换！！");
+                        alert("二维码图片大于200KB,请更换！！");
                     }else if(i=="2"){
-                        alert("底部图片大于100KB,请更换！！");
+                        alert("底部图片大于200KB,请更换！！");
                     }else if(i=="3"){
-                        alert("全屏图片大于100KB,请更换！！");
+                        alert("全屏图片大于200KB,请更换！！");
                     }
                     return;
                 }
@@ -412,12 +438,14 @@
                 return;
             }
         }
+        showMask()
         $("#info").ajaxSubmit({
             async:false,
             url:"/uploadImage.do",
             type:"post",
             data:{"openId":openId,"image1Path":image1Path,"image2Path":image2Path,"image3Path":image3Path},
             success:function(r){
+                hideMask();
                 window.location.href="/link.html?openId="+openId;
             }
         })

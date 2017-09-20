@@ -22,6 +22,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,8 @@ public class GetUrlController extends BaseAction{
     //图片保存路径
     //private static final String saveImgPath="E://imgs";
     //private static final String htmlPath="192.168.0.130:8090/";
-//    private static final String relativelyPath=System.getProperty("user.dir")+"/src/main/resources/static/";
+//    private static final String relativelyPath=Sy stem.getProperty("user.dir")+"/src/main/resources/static/";
+
     private static final String relativelyPath="/usr/local/apache-tomcat-8.5.20/webapps/";
     private static final String UrlPath="http://weixin.puyuekeji.com/";
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -68,12 +70,12 @@ public class GetUrlController extends BaseAction{
 //    }
 
     /**
-     * 获取文章的URL并生成原网页和广告页
+     * 获取微信文章的URL并生成原网页和广告页
      * @param url
      * @param openId
      * @return
      */
-    @RequestMapping("/getUrl.do")
+
     public String getUrl(@RequestParam(value = "url") String url, @RequestParam(value = "openId") String openId, HttpServletRequest request){
         String timestamp=String.valueOf(System.currentTimeMillis());
         UserPathPojo userPathPojo=userDao.selectById(openId);
@@ -82,10 +84,17 @@ public class GetUrlController extends BaseAction{
         //String url="\"http://mp.weixin.qq.com/s/4k6TOX9EFmhsuiSnQMHmkA\"";
         //String url="http://mp.weixin.qq.com/s/yhKh-5pLKXDxE4rKkVE4cQ";
         // 利用Jsoup获得连接
-        String oldTitle="";
+
         Connection connect = Jsoup.connect(url);
         String name="old"+timestamp+".html";
+        String type=null;
+        if(url.indexOf("http://mp.weixin.qq.com/s")!=-1){
+            type="WX";
+        }else if(url.indexOf("http://api.woshipm.com")!=-1){
+            type="RR";
+        }else{
 
+        }
         try {
             // 得到Document对象
             Document document = connect.referrer("never").get();
@@ -94,44 +103,28 @@ public class GetUrlController extends BaseAction{
 
             // 查找所有img标签
             Elements imgs = document.getElementsByTag("img");
-            //修改作者
-            if(userPathPojo.getUserAuthor().length()!=0){
-                Element authors=document.getElementById("post-user");
-                authors.text(userPathPojo.getUserAuthor());
-            }
-            //修改时间
-            String time= String.valueOf(userPathPojo.getUserDate());
-            System.out.println(time);
-            String formatStr="";
-            if(time!="null"){
-                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-                //java.util.Date对象
-                java.util.Date date = (java.util.Date) sdf.parse(time);
-                //2009-09-16
-                formatStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                System.out.println(formatStr);
-            }
-            if(formatStr!=""){
-                Element time1=document.getElementById("post-date");
-                time1.text(formatStr);
-            }
-            Element title1=document.getElementById("activity-name");
-            oldTitle= title1.text();
-            //修改标题
-            if(userPathPojo.getUserTitle().length()!=0){
-                title1=document.getElementById("activity-name");
-                title1.text(userPathPojo.getUserTitle());
-                oldTitle=userPathPojo.getUserTitle();
+            if(type=="WX"){//微信文章
+                update(document,userPathPojo,"WX");
+            }else if(type=="RR"){//人人网文章
+                update(document,userPathPojo,"RR");
+                String script= "<script type=\"text/JavaScript\" src=\"http://res.wx.qq.com/open/js/jweixin-1.0.0.js\"></script>" +
+                        "<link href=\"http://api.woshipm.com/assets/css/mobile2.0.css\" rel=\"stylesheet\" type=\"text/css\">" +
+                        "<script type=\"text/javascript\" src=\"http://api.woshipm.com/assets/js/common.js\"></script>" +
+                        "<script type=\"text/javascript\" src=\"http://api.woshipm.com/assets/js/baidu.js\"></script>";
+                document.select("script").first().after(script);
             }
 
-            System.out.println("共检测到下列图片URL：");
-            System.out.println("开始下载");
             // 遍历img标签并获得src的属性
             for (Element element : imgs) {
                 //获取每个img标签URL "abs:"表示绝对路径
-                String imgSrc = element.attr("abs:data-src");
-                element.attr("src","http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=" + imgSrc);
-                element.removeAttr("data-src");
+                if(type=="WX"){
+                    String imgSrc = element.attr("abs:data-src");
+                    element.attr("src","http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=" + imgSrc);
+                    element.removeAttr("data-src");
+                }else if(type=="RR"){
+                    //String imgSrc = element.attr("src");
+                    //element.attr("src","http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=" + imgSrc);
+                }
             }
             Elements iframe = document.getElementsByTag("iframe");
             for (Element element : iframe) {
@@ -157,9 +150,9 @@ public class GetUrlController extends BaseAction{
             for(Element element:elements){
                 element.attr("src",name);
             }
-            //修改底部文案连接
-            Element title2=doc.getElementById("title");
-            title2.text(oldTitle);
+//            //修改底部文案连接
+//            Element title2=doc.getElementById("title");
+//            title2.text(oldTitle);
             //修改电话
             Element newTel=doc.getElementById("phone-link");
             newTel.attr("href","tel:"+userPathPojo.getCell());
@@ -167,22 +160,13 @@ public class GetUrlController extends BaseAction{
             if(userPathPojo.getUserUrl()!="http://"){
                 Element newBottomLink=doc.getElementById("adLink");
                 newBottomLink.attr("href",userPathPojo.getUserUrl());
+                Element fullImgLink=doc.getElementById("fullImgLink");
+                fullImgLink.attr("href",userPathPojo.getUserUrl());
             }
             //定义广告页的名字
             String fileName=timestamp+".html";
-            //生成二维码
-            //File quickResponseDir = new File(relativelyPath+"images/QuickMark/"+String.valueOf(day));
-//            if(!quickResponseDir.exists()){
-//                quickResponseDir.mkdir();
-//            }
-            //二维码的日期目录路径
-            //String QuickResponseDirPath=quickResponseDir.getPath();
-            //String QuickResponse=QuickResponseDirPath+"/img"+timestamp+".jpg";
-            //生成二维码(扫描二维码跳转的路径/二维码宽度/二维码高度/二维码嵌入的图片位置/二维码生成路径)
-            //GetUrl.encode(htmlPath+"html/"+day+"/"+fileName, 480, 480, relativelyPath+"images/img.jpg",QuickResponse);
-            //修改二维码
-                Element pubNum=doc.getElementById("pub-num");
-                pubNum.attr("src",userPathPojo.getUserQrcode());
+            Element pubNum=doc.getElementById("pub-num");
+            pubNum.attr("src",userPathPojo.getUserQrcode());
             //修改底部广告
             if(userPathPojo.getUserBottomAd().length()!=0){
                 Element BottomAd=doc.getElementById("adImg");
@@ -211,11 +195,7 @@ public class GetUrlController extends BaseAction{
             //生成带广告的广告页面
             File newFile = new File(relativelyPath+dirPath+"/"+fileName);
             FileUtils.writeByteArrayToFile(newFile,String.valueOf(doc).getBytes());
-//            Runtime.getRuntime().exec("chmod -R 755 " + relativelyPath);
             String returnPath=UrlPath+dirPath+"/"+fileName+"?openId="+openId;
-//            String returnPath=dirPath+"/"+fileName;
-            //url
-            //String jsUrl="http://vav534.natappfree.cc"+dirPath+"/"+fileName;
             String jsUrl=returnPath;
             //1、获取access_token
             String access_token= (String) session.getAttribute("access_token");
@@ -246,11 +226,54 @@ public class GetUrlController extends BaseAction{
         return "";
     }
 
+    public void update(Document document,UserPathPojo userPathPojo,String type) throws ParseException {
+        //修改标题
+        if(userPathPojo.getUserTitle().length()!=0){
+            Element title1=null;
+            if(type=="WX"){//微信文章
+                title1=document.getElementById("activity-name");
+            }else if(type=="RR"){//人人网文章
+                title1= document.getElementsByClass("yd_detail_h1").get(0);
+            }
+            title1.text(userPathPojo.getUserTitle());
+        }
+        //修改作者
+        if(userPathPojo.getUserAuthor().length()!=0){
+            Element authors=null;
+            if(type=="WX"){
+                authors=document.getElementById("post-user");
+            }else if(type=="RR"){
+                authors=document.getElementsByClass("blue_font r_rline pad_r10").get(0);
+            }
+            authors.text(userPathPojo.getUserAuthor());
+        }
+        //修改时间
+        String time= String.valueOf(userPathPojo.getUserDate());
+        String formatStr="";
+        if(time!="null"){
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            //java.util.Date对象
+            java.util.Date date =  sdf.parse(time);
+            //2009-09-16
+            Element time1=null;
+            if(type=="WX"){
+                formatStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                time1=document.getElementById("post-date");
+            }else if(type=="RR"){
+                formatStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                time1=document.getElementsByClass("mar_l10").get(2);
+            }
+            time1.text(formatStr);
+        }
+    }
+
+
     /**
      *
      * 根据appId和appSecret换取accessToken
      * @return
      */
+
     public String  getAccessToken(){
         String access_token = "";
         String aturl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + AppId
@@ -359,6 +382,7 @@ public class GetUrlController extends BaseAction{
         //5、将字符串进行sha1加密
         String signature =SHA1(str);
         getSignatureRequest.setSignature(signature);
+
         response.setData(getSignatureRequest);
         return response;
     }

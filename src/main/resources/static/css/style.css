@@ -4,8 +4,8 @@ body{background: #f8f8f8;font:100% "Helvetica Neue","microsoft yahei";color:#3d4
 .clear {clear:both; height:0; overflow:hidden; display:block; line-height:0}
 .clearfix:after {clear:both;font-size:0; height:0; display:block; visibility:hidden; content:" "; line-height:0}
 .clearfix {zoom:1}/* for IE6 IE7 */
-input[type=text],input[type=number],input[type=date],input[type=submit]{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }
-
+/*input[type=text],input[type=number],input[type=date],input[type=submit]{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }*/
+input{  background-color:transparent; border-color:transparent;-webkit-appearance: none;  }
 footer{width:100%;height:auto;position:fixed;bottom:0;left:0;padding:0.4em 0;border-top:1px solid #d9d9d9;background-color:#fff;}
 footer ul{width:100%;height:auto;float:left;}
 footer ul li{width:33.33%;height:auto;float:left;text-align:center;}
@@ -26,7 +26,7 @@ footer ul li span{width:100%;height:auto;float:left;font-size:0.625em;color:#2a2
 input.infoSubBtn{width:88%;margin:0 6% 1em;height:auto;float:left;font-size:1.2em;line-height:2em;background-color:#0894ec;border-radius:5px;color:#fff;}
 .modal{ width:100%;height:100%;position:fixed;top:0;left:0;background-color:#fff;z-index:5;display:none;  }
 .clipArea {  height:100%;  }
-.clipBtn{position:absolute;right:3%;bottom:3%;}
+.clipBtn{position:absolute;right:3%;bottom:3%;background-color:#d9d9d9;border:solid 1px #000;width:4em;height:2em;line-height:2em;border-radius:1em;text-align:center;}
 .linkMain{width:94%;height:auto;margin:0 3% 3.8em;float:left;}
 .linkUser{width:100%;height:auto;float:left;padding:2em 0;}
 .headBox{width:5.4em;height:5.4em;margin:1.5em auto;border:1px solid #d9d9d9;border-radius:50%;overflow:hidden;}
