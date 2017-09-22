@@ -360,10 +360,15 @@ public class GetUrlController extends BaseAction{
      */
     @RequestMapping("/encryption.do")
     public Response encryption(HttpServletRequest request,GetSignatureRequest getSignatureRequest,
-                               @RequestParam(value ="timestamp") String timestamp,
-                               @RequestParam(value ="noncestr") String noncestr,
-                               @RequestParam(value ="jsUrl") String jsUrl){
+                               @RequestParam(value ="timestamp", required=false) String timestamp,
+                               @RequestParam(value ="noncestr", required=false) String noncestr,
+                               @RequestParam(value ="jsUrl", required=false) String jsUrl){
+        if(timestamp==null){
+            timestamp=String.valueOf(System.currentTimeMillis());
+        }
+        if(noncestr==null){
 
+        }
         Response response=new Response(getSignatureRequest);
         //String openId=request.getParameter("openId");
         HttpSession session = request.getSession();

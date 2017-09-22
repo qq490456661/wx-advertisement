@@ -1,5 +1,7 @@
 package com.onway.web.controller;
 
+import com.onway.web.module.request.PayRequest;
+import com.onway.web.module.response.Response;
 import com.onway.web.pojo.PayOrder;
 import com.onway.web.util.HttpConnection;
 import com.thoughtworks.xstream.XStream;
@@ -14,15 +16,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.codehaus.groovy.control.XStreamUtils;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,16 +43,34 @@ public class WxJsPayController {
       */
      private String unifiedOrderUrl="https://api.mch.weixin.qq.com/pay/unifiedorder";
      @RequestMapping("testPay.do")
-     public String testPay(String openId) throws Exception {
-          String a=createOrder(openId,"wx20150806125348",1,"http://www.baidu.com");
-          //String prepay_id="wx2017092016494412d6118bf20408120243";
-          return a;
+     public Response testPay(String openId,PayRequest payResponse) throws Exception {
+         Map map=createOrder(openId,"20170921123456",1,"http://jj8uye.natappfree.cc/test.html");
+         String paySign=createPaySign(map);
+
+         Response response=new Response(payResponse);
+         payResponse.setPrepay_id((String) map.get("package"));
+         payResponse.setAppId((String) map.get("appId"));
+         payResponse.setNonceStr((String) map.get("nonceStr"));
+         payResponse.setPaySign(paySign);
+         payResponse.setTimeStamp((String) map.get("timeStamp"));
+         response.setData(payResponse);
+
+         return response;
      }
 
+     /**
+      * 生成订单
+      * @param openId
+      * @param orderId
+      * @param money
+      * @param callbackUrl
+      * @return
+      * @throws Exception
+      */
 
-     public String createOrder(String openId,String orderId,int money,String callbackUrl)
+     public Map createOrder(String openId,String orderId,int money,String callbackUrl)
          throws Exception {
-          //String timestamp=String.valueOf(System.currentTimeMillis());
+          String timestamp=String.valueOf(System.currentTimeMillis());
           PayOrder payOrder = new PayOrder();
           payOrder.setAppid(appId);
           payOrder.setMch_id(mchId);
@@ -64,10 +81,11 @@ public class WxJsPayController {
           payOrder.setNotify_url(callbackUrl);
           payOrder.setOpenid(openId);
           payOrder.setOut_trade_no(orderId);
-          payOrder.setSpbill_create_ip("118.178.135.106");
+//          payOrder.setSpbill_create_ip("118.178.135.106");
+          payOrder.setSpbill_create_ip("183.128.187.49");
           payOrder.setTotal_fee(money);
           payOrder.setTrade_type("JSAPI");
-          //payOrder.setTimeStamp(timestamp);
+
           String sign = createUnifiedOrderSign(payOrder);
           payOrder.setSign(sign);
 
@@ -82,8 +100,18 @@ public class WxJsPayController {
           String xml=xstream.toXML(payOrder);
           HttpConnection httpConnection=new HttpConnection();
           String response = httpConnection.post(unifiedOrderUrl, xml);
-          System.out.println(response);
-          return response;
+          Document document = DocumentHelper.parseText(response);
+          Element root = document.getRootElement();
+          Element element=root.element("prepay_id");
+          String prepay_id=element.getText();
+          Map map=new HashMap();
+          payOrder.setTimeStamp(timestamp);
+          map.put("appId",payOrder.getAppid());
+          map.put("timeStamp",payOrder.getTimeStamp());
+          map.put("nonceStr",payOrder.getNonce_str());
+          map.put("package","prepay_id="+prepay_id);
+
+          return map;
      }
      /**
       * 获取统一下单签名
@@ -111,6 +139,27 @@ public class WxJsPayController {
           //sign.append("&timestamp=").append(payOrder.getTimeStamp());
           sign.append("&key=").append(payKey);
 
+          return DigestUtils.md5Hex(sign.toString()).toUpperCase();
+     }
+
+
+     /**
+      * 支付签名
+      * @Title: createUnifiedOrderSign
+      * @Description: TODO
+      * @param @param unifiedOrder
+      * @param @return
+      * @return String
+      * @throws
+      */
+     public String createPaySign(Map map){
+          StringBuffer sign = new StringBuffer();
+          sign.append("appid=").append(map.get("appId"));
+          sign.append("&nonceStr=").append(map.get("nonceStr"));
+          sign.append("&package=").append(map.get("package"));
+          sign.append("&signType=MD5");
+          sign.append("&timeStamp=").append(map.get("timeStamp"));
+          sign.append("&key=").append(payKey);
           return DigestUtils.md5Hex(sign.toString()).toUpperCase();
      }
      /**

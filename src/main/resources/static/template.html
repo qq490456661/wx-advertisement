@@ -360,8 +360,6 @@
     $(function () {
         var jsUrl= window.location.href;
         var openId=GetQueryString("openId");
-        var d = new Date();
-        var nowDate = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
         jQuery.ajax({
             url: '/selectById.do',
             type: 'post',

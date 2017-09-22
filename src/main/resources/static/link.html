@@ -22,6 +22,7 @@
     <input type="text" id="text" placeholder="在这里粘贴原文链接">
     <input class="linkSubBtn" type="button" value="点击提交" onclick="commit()">
     <a href="test.html">跳转测试页</a>
+    <!--<a href="#" onclick="getToken()">获取相应的token</a>-->
 </main>
 <footer>
     <ul>
@@ -58,6 +59,55 @@
             }
         })
     })
+    function getToken(){
+
+//      var jsUrl= window.location.href;
+//      var openId=GetQueryString("openId");
+//
+//          jQuery.ajax({
+//            url:'/encryption.do',
+//            type:'post',
+//            data:{"openId":openId,"timestamp":timestamp,"noncestr":noncestr,"jsUrl":jsUrl},
+//            success:function(r){
+//              var data=r.data;
+//              signature = data.signature;
+//              var index = jsUrl .lastIndexOf("\/");
+//              strL  = jsUrl .substring(index + 1, jsUrl .length);
+//              idnex =jsUrl.indexOf(strL);
+//              var prefix=jsUrl.substring(0,index+1);
+//              var oldUrl=prefix+"old"+strL;
+//                  var data=r.data;
+//                  msg_title=data.msgTitle;
+//                  msg_cdn_url=data.msgCdnUrl;
+//                  msg_desc=data.msgDesc;
+//                  wx.config({
+//                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                    appId: 'wxa16425d3780729a5', // 必填，公众号的唯一标识
+//                    timestamp: timestamp, // 必填，生成签名的时间戳
+//                    nonceStr: noncestr, // 必填，生成签名的随机串
+//                    signature: signature,// 必填，签名，见附录1
+//                    jsApiList: [
+//                      'checkJsApi',
+//                      'onMenuShareTimeline',
+//                      'onMenuShareAppMessage',
+//                      'onMenuShareQQ',
+//                      'onMenuShareWeibo',
+//                      'chooseWXPay'
+//                    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+//                  });
+//                  wx.ready(function () {
+//
+//
+//
+//                  });
+//            }
+//          })
+//
+
+
+
+
+    }
     function info(){
         window.location.href="/getUserPath.do?openId="+openId;
     }
